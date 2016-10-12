@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSamPut_RBFFDreg(N,n,ep,M)
+function [u,err,tim,x,dx,N,W] = BSamPut1D_RBFFDreg(N,n,ep,M)
 %% 1D American Put RBF-FD
 % 2016-02-06
 
