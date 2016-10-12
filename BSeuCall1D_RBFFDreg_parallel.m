@@ -58,14 +58,14 @@ Axx = spdiags(Axx,-n+1:n-1,N,N);
 
 %% Weights
 iind=repmat(indin,n,1); iind=iind(:);
-% jind=zeros((N-2)*n,1);
+jind=zeros((N-2)*n,1);
 Wval=zeros(n,N-2);
 
 lc=zeros(n+1,1);
 
 bb=0;
 for ii=2:m
-%     bb=bb+1;
+    bb=bb+1;
     xc=x(ii);
     indc=1:n;
     
@@ -82,13 +82,12 @@ for ii=2:m
     %     wc=Ac\lc;
     %     Wval(:,ii-1)=wc;
     
-%     jind(bb:bb+n-1)=indc;
-%     bb=bb+n-1;
+    jind(bb:bb+n-1)=indc;
+    bb=bb+n-1;
 end
 
 parfor ii=(m+1):(N-m)
-%     bb=bb+1;
-    lc=zeros(n+1,1);
+    bb=bb+1;
     xc=x(ii);
     indc=ii-m:ii+m;
     
@@ -105,12 +104,12 @@ parfor ii=(m+1):(N-m)
     %     wc=Ac\lc;
     %     Wval(:,ii-1)=wc;
     
-%     jind(bb:bb+n-1)=indc;
-%     bb=bb+n-1;
+    jind(bb:bb+n-1)=indc;
+    bb=bb+n-1;
 end
 
 for ii=(N-m+1):(N-1)
-%     bb=bb+1;
+    bb=bb+1;
     xc=x(ii);
     indc=N-n+1:N;
     
@@ -127,8 +126,8 @@ for ii=(N-m+1):(N-1)
     %     wc=Ac\lc;
     %     Wval(:,ii-1)=wc;
     
-%     jind(bb:bb+n-1)=indc;
-%     bb=bb+n-1;
+    jind(bb:bb+n-1)=indc;
+    bb=bb+n-1;
 end
 
 Wval=Wval(:);
