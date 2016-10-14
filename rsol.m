@@ -1,5 +1,3 @@
-% Copyright 2014, Slobodan Milovanovic 
-
 function u = rsol(sig, r, K, T, s)
 
 d1=(log(s./K)+(r+0.5*sig^2)*T)/(sig*sqrt(T));
