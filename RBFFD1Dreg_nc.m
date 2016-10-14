@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg(N,n,ep,M)
+function [u,err,tim,x,dx,N,W] = RBFFD1Dreg_nc(N,n,ep,M)
 %K,T,r,sig,M
 %% 1D European Call RBF-FD
 % Copyright 2015, Slobodan Milovanovic
@@ -13,13 +13,16 @@ r=0.03; %interest
 sig=0.15; %volatility
 
 %% Grid
+% N=8001;
 x=transpose(linspace(0,4,N));
 dx=x(2)-x(1);
 
 indin=2:N-1;
 
+% n=3; %stencil size
 m=round((n-1)/2);
 
+% M=100000;
 dt=T/(M-1);
 % t=T:-dt:0;
 
@@ -69,18 +72,18 @@ for ii=2:m
     xc=x(ii);
     indc=1:n;
     
-    o=ones(1,n);
-    Ac=[A(indc,indc), transpose(o);
-        o, 0];
-    lc(1:n,1)=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    lc(n+1,1)=-r;
-    wc=Ac\lc;
-    Wval(:,ii-1)=wc(1:end-1);
+%     o=ones(1,n);
+%     Ac=[A(indc,indc), transpose(o);
+%         o, 0];
+%     lc(1:n,1)=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
+%     lc(n+1,1)=-r;
+%     wc=Ac\lc;
+%     Wval(:,ii-1)=wc(1:end-1);
     
-    %     Ac=A(indc,indc);
-    %     lc=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    %     wc=Ac\lc;
-    %     Wval(:,ii-1)=wc;
+        Ac=A(indc,indc);
+        lc=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
+        wc=Ac\lc;
+        Wval(:,ii-1)=wc;
     
     jind(bb:bb+n-1)=indc;
     bb=bb+n-1;
@@ -91,18 +94,18 @@ for ii=(m+1):(N-m)
     xc=x(ii);
     indc=ii-m:ii+m;
     
-    o=ones(1,n);
-    Ac=[A(indc,indc), transpose(o);
-        o, 0];
-    lc(1:n,1)=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    lc(n+1,1)=-r;
-    wc=Ac\lc;
-    Wval(:,ii-1)=wc(1:end-1);
+%     o=ones(1,n);
+%     Ac=[A(indc,indc), transpose(o);
+%         o, 0];
+%     lc(1:n,1)=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
+%     lc(n+1,1)=-r;
+%     wc=Ac\lc;
+%     Wval(:,ii-1)=wc(1:end-1);
     
-    %     Ac=A(indc,indc);
-    %     lc=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    %     wc=Ac\lc;
-    %     Wval(:,ii-1)=wc;
+        Ac=A(indc,indc);
+        lc=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
+        wc=Ac\lc;
+        Wval(:,ii-1)=wc;
     
     jind(bb:bb+n-1)=indc;
     bb=bb+n-1;
@@ -113,18 +116,18 @@ for ii=(N-m+1):(N-1)
     xc=x(ii);
     indc=N-n+1:N;
     
-    o=ones(1,n);
-    Ac=[A(indc,indc), transpose(o);
-        o, 0];
-    lc(1:n,1)=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    lc(n+1,1)=-r;
-    wc=Ac\lc;
-    Wval(:,ii-1)=wc(1:end-1);
+%     o=ones(1,n);
+%     Ac=[A(indc,indc), transpose(o);
+%         o, 0];
+%     lc(1:n,1)=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
+%     lc(n+1,1)=-r;
+%     wc=Ac\lc;
+%     Wval(:,ii-1)=wc(1:end-1);
     
-    %     Ac=A(indc,indc);
-    %     lc=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    %     wc=Ac\lc;
-    %     Wval(:,ii-1)=wc;
+        Ac=A(indc,indc);
+        lc=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
+        wc=Ac\lc;
+        Wval(:,ii-1)=wc;
     
     jind(bb:bb+n-1)=indc;
     bb=bb+n-1;
@@ -183,18 +186,17 @@ for ii=3:M
     u=max(u,0);
 end
 tim=toc;
-
 %% Error
-indreg=[];
-for ii=1:length(x)
-    %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
-    if x(ii)>=1/3*Kx && x(ii)<=5/3*Kx
-        indreg=[indreg ii];
-    end
-end
-
-x=x(indreg);
-u=u(indreg);
+% indreg=[];
+% for ii=1:length(x)
+%     %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
+%     if x(ii)>=1/3*Kx && x(ii)<=5/3*Kx
+%         indreg=[indreg ii];
+%     end
+% end
+% 
+% x=x(indreg);
+% u=u(indreg);
 
 % K=100;
 x=K*x;

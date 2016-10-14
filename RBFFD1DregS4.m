@@ -1,8 +1,8 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg(N,n,ep,M)
+function [u,err,tim,x,dx,N,W] = RBFFD1DregS4(N,n,ep,M)
 %K,T,r,sig,M
 %% 1D European Call RBF-FD
-% Copyright 2015, Slobodan Milovanovic
-% 2016-02-06
+% Copyright 2014, Slobodan Milovanovic 
+% 2016-06-04
 
 tic
 %% Parameters
@@ -20,19 +20,36 @@ indin=2:N-1;
 
 m=round((n-1)/2);
 
+% M=100000;
 dt=T/(M-1);
 % t=T:-dt:0;
 
 %% Initial condition
-u=max(x-Kx,zeros(N,1)); %u0=u;
+% u=max(x-Kx,zeros(N,1)); u0=u;
+
+u=@(x) max(x-Kx,0);
+
+%4th order smoothing
+ff1=@(x) 2*(1/12)*(pi/2)*(((x+2).^3).*sign(x+2) -((x-2).^3).*sign(2-x)); %fourier(cos(2*w)/w^4, w, -x)
+ff2=@(x) 2*(1/12)*(pi/2)*(((x+3).^3).*sign(x+3) -((x-3).^3).*sign(3-x)); %fourier(cos(3*w)/w^4, w, -x)
+ff3=@(x) 2*(1/12)*(pi/2)*(((x+1).^3).*sign(x+1) -((x-1).^3).*sign(1-x)); %fourier(cos(w)/w^4, w, -x)
+
+f1=@(x) (4*ff1(x))/(2*pi);
+f2=@(x) (-ff2(x)/3)/(2*pi);
+f3=@(x) ((14*pi*x.^3.*sign(x))/9)/(2*pi);
+f4=@(x) (-13*ff3(x))/(2*pi);
+
+M4=@(x) f1(x)+f2(x)+f3(x)+f4(x);
+for ii=1:N
+%     util1(ii)=(1/dx) * integral(@(s)u(x(ii)-s), -dx/2,+dx/2);
+%     util2(ii)=(1/dx) * integral(@(s)(1-abs(s/dx)).*u(x(ii)-s), -dx,+dx);
+    util4(ii)=(1/(dx)) * integral(@(s)M4(s/dx).*u(x(ii)-s), -3*dx,+3*dx);
+end
+
+u=util4'; u0=u;
 
 %% RBF
 phi='gs';
-
-% Rc=xcdist(x,x,1);
-% A=RBFmat(phi,ep,Rc,'0',1);
-% Ax=RBFmat(phi,ep,Rc,'1',1);
-% Axx=RBFmat(phi,ep,Rc,'2',1);
 
 Rc=zeros(N,2*n-1,2);
 
@@ -183,18 +200,17 @@ for ii=3:M
     u=max(u,0);
 end
 tim=toc;
-
 %% Error
-indreg=[];
-for ii=1:length(x)
-    %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
-    if x(ii)>=1/3*Kx && x(ii)<=5/3*Kx
-        indreg=[indreg ii];
-    end
-end
-
-x=x(indreg);
-u=u(indreg);
+% indreg=[];
+% for ii=1:length(x)
+%     %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
+%     if x(ii)>=1/3*Kx && x(ii)<=5/3*Kx
+%         indreg=[indreg ii];
+%     end
+% end
+% 
+% x=x(indreg);
+% u=u(indreg);
 
 % K=100;
 x=K*x;
@@ -210,5 +226,5 @@ err=(u-ua);
 % figure()
 % plot(x,abs(u-ua));
 
-
 end
+

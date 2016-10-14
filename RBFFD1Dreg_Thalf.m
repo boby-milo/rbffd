@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg(N,n,ep,M)
+function [u,err,tim,x,dx,N,W] = RBFFD1Dreg_Thalf(N,n,ep,M)
 %K,T,r,sig,M
 %% 1D European Call RBF-FD
 % Copyright 2015, Slobodan Milovanovic
@@ -20,11 +20,13 @@ indin=2:N-1;
 
 m=round((n-1)/2);
 
-dt=T/(M-1);
+% M=100000;
+dt=0.5*T/(M-1);
 % t=T:-dt:0;
 
 %% Initial condition
-u=max(x-Kx,zeros(N,1)); %u0=u;
+u=max(x-Kx,zeros(N,1)); u0=u;
+u = rsol(sig, r, Kx, T/2, x);
 
 %% RBF
 phi='gs';
@@ -161,7 +163,7 @@ A=I-W*dt;
 u1=u;
 
 b=u1;
-b(end)=x(end)-Kx*exp(-r*dt);
+b(end)=x(end)-Kx*exp(-r*(T/2+dt));
 
 u=A\b;
 u=max(u,0);
@@ -176,37 +178,36 @@ for ii=3:M
     u1=u;
     
     b=((4/3)*u1-(1/3)*u2);
-    b(end)=x(end)-Kx*exp(-r*(ii-1)*dt);
+    b(end)=x(end)-Kx*exp(-r*(T/2+(ii-1)*dt));
     
     u(rcm)=L1\b(rcm);
     u(rcm)=U1\u(rcm);
     u=max(u,0);
 end
 tim=toc;
-
 %% Error
-indreg=[];
-for ii=1:length(x)
-    %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
-    if x(ii)>=1/3*Kx && x(ii)<=5/3*Kx
-        indreg=[indreg ii];
-    end
-end
-
-x=x(indreg);
-u=u(indreg);
+% indreg=[];
+% for ii=1:length(x)
+%     %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
+%     if x(ii)>=1/3*Kx && x(ii)<=5/3*Kx
+%         indreg=[indreg ii];
+%     end
+% end
+% 
+% x=x(indreg);
+% u=u(indreg);
 
 % K=100;
 x=K*x;
-u=K*u; %u0=K*u0;
+u=K*u; u0=K*u0;
 
 ua=rsol(sig, r, K, T, x);
 
 % figure()
 % plot(x,u0,'k--',x,u,'b-',x,ua,'r-')
-
+% 
 err=(u-ua);
-
+% 
 % figure()
 % plot(x,abs(u-ua));
 

@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSamPut1D_RBFFDreg(N,n,ep,M)
+function [u,err,tim,x,dx,N,W] = BSamPut_RBFFDreg(N,n,ep,M)
 %% 1D American Put RBF-FD
 % 2016-02-06
 
@@ -55,13 +55,14 @@ Axx = spdiags(Axx,-n+1:n-1,N,N);
 
 %% Weights
 iind=repmat(indin,n,1); iind=iind(:);
-jind=zeros(n,N-2);
+jind=zeros((N-2)*n,1);
 Wval=zeros(n,N-2);
 
 lc=zeros(n+1,1);
 
 bb=0;
 for ii=2:m
+    bb=bb+1;
     xc=x(ii);
     indc=1:n;
     
@@ -78,10 +79,12 @@ for ii=2:m
     %     wc=Ac\lc;
     %     Wval(:,ii-1)=wc;
     
-    jind(:,ii-1)=indc';
+    jind(bb:bb+n-1)=indc;
+    bb=bb+n-1;
 end
 
 for ii=(m+1):(N-m)
+    bb=bb+1;
     xc=x(ii);
     indc=ii-m:ii+m;
     
@@ -98,10 +101,12 @@ for ii=(m+1):(N-m)
     %     wc=Ac\lc;
     %     Wval(:,ii-1)=wc;
     
-    jind(:,ii-1)=indc';
+    jind(bb:bb+n-1)=indc;
+    bb=bb+n-1;
 end
 
 for ii=(N-m+1):(N-1)
+    bb=bb+1;
     xc=x(ii);
     indc=N-n+1:N;
     
@@ -118,9 +123,10 @@ for ii=(N-m+1):(N-1)
     %     wc=Ac\lc;
     %     Wval(:,ii-1)=wc;
     
-    jind(:,ii-1)=indc';
+    jind(bb:bb+n-1)=indc;
+    bb=bb+n-1;
 end
-jind=jind(:);
+
 Wval=Wval(:);
 W=sparse(iind,jind,Wval,N,N);
 
@@ -162,16 +168,16 @@ for ii=3:M
     lambda=zeros(N,1);
     
     u=util+(2/3)*dt*(lambda-lambdaold);
-    
+   
     
     for jj=1:N
         if u(jj)-(Kx-x(jj))<0
             u(jj)=Kx-x(jj);
             lambda(jj)=lambdaold(jj)+(3/(2*dt))*(u(jj)-util(jj));
         end
-    end
+    end  
     u=max(u,0);
-    
+   
 end
 tim=toc;
 %% Error
