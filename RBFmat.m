@@ -7,7 +7,3 @@ elseif (nargin==4)
 else
   error('Wrong number of arguments to RBFmat')
 end
-
-
-
-
