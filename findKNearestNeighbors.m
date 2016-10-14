@@ -68,5 +68,3 @@ else  % Use the KD Tree code from by Andrea Tagliasacchi
 end
 
 end
-
-
