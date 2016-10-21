@@ -3,17 +3,17 @@
 %% 1D European Call RBF-FD
 % Copyright 2015, Slobodan Milovanovic
 % 2016-02-06
-clc
+% clc
 close all
 clear
 
 n=25;
 
 phi='gs';
-ep=1;
+ep=5;
 
 
-Nx=300;
+Nx=750;
 Ny=round(Nx/8);
 
 S = [90,100,110];
