@@ -4,7 +4,7 @@ close all
 
 warning off
 
-cd('./2Da2fit1.75new')
+% cd('./2Da2fit1.75new')
 a=2;
 fit=2;
 
