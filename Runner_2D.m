@@ -4,9 +4,9 @@ close all
 
 warning off
 
-cd('./2Da2fit1.75')
+cd('./2Da2fit1.75new')
 a=2;
-fit=1.75;
+fit=2;
 
 gamma9=0.011; gamma9=fit*gamma9;
 gamma13=0.0145; gamma13=fit*gamma13;

@@ -107,6 +107,7 @@ Wval=zeros(n,numel(indin));  %n*N
 
 % internal points {
 bb=0;
+lc=zeros(n+1,1);
 for ii=indin
     bb=bb+1;
     %     ii
