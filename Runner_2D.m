@@ -57,14 +57,14 @@ for ii=1:numel(Nx)
     filename=['BSeuCallbasket2D_RBFFDreg_','ep',num2str(9),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
     
-%         [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDstag(Nx(ii),9,eps,M);
-%         display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h)],'Time EU stag')
-%         filename=['BSeuCallbasket2D_RBFFDstag_','ep',num2str(9),'Nx',num2str(Nx(ii))];
-%         save(filename,'u','err','tim','s','h','N','M','eps');
+    [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDadapEpsmin(Nx(ii),9,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time EU adapEpsmin')
+    filename=['BSeuCallbasket2D_RBFFDadapEpsmin_','ep',num2str(9),'Nx',num2str(Nx(ii))];
+    save(filename,'u','err','tim','s','h','N','M','eps');
     
-    [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDadapEps(Nx(ii),9,M(ii),fit);
-    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time EU adapEps')
-    filename=['BSeuCallbasket2D_RBFFDadapEps_','ep',num2str(9),'Nx',num2str(Nx(ii))];
+    [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDadapEpsavg(Nx(ii),9,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time EU adapEpsavg')
+    filename=['BSeuCallbasket2D_RBFFDadapEpsavg_','ep',num2str(9),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
@@ -74,11 +74,15 @@ for ii=1:numel(Nx)
     filename=['BSamPutbasket2D_RBFFDreg_','ep',num2str(9),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
     
-    [u,err,tim,s,h,N,~] = BSamPutbasket2D_RBFFDadapEps(Nx(ii),9,M(ii),fit);
-    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time AM adapEps')
-    filename=['BSamPutbasket2D_RBFFDadapEps_','ep',num2str(9),'Nx',num2str(Nx(ii))];
+    [u,err,tim,s,h,N,~] = BSamPutbasket2D_RBFFDadapEpsmin(Nx(ii),9,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time AM adapEpsmin')
+    filename=['BSamPutbasket2D_RBFFDadapEpsmin_','ep',num2str(9),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
     
+    [u,err,tim,s,h,N,~] = BSamPutbasket2D_RBFFDadapEpsavg(Nx(ii),9,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time AM adapEpsavg')
+    filename=['BSamPutbasket2D_RBFFDadapEpsavg_','ep',num2str(9),'Nx',num2str(Nx(ii))];
+    save(filename,'u','err','tim','s','h','N','M','eps');
     
     
     
@@ -93,14 +97,14 @@ for ii=1:numel(Nx)
     filename=['BSeuCallbasket2D_RBFFDreg_','ep',num2str(13),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
     
-    %     [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDstag(Nx(ii),13,eps,M);
-    %     display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h)],'Time EU stag')
-    %     filename=['BSeuCallbasket2D_RBFFDstag_','ep',num2str(13),'Nx',num2str(Nx(ii))];
-    %     save(filename,'u','err','tim','s','h','N','M','eps');
+    [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDadapEpsmin(Nx(ii),13,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time EU adapEpsmin')
+    filename=['BSeuCallbasket2D_RBFFDadapEpsmin_','ep',num2str(13),'Nx',num2str(Nx(ii))];
+    save(filename,'u','err','tim','s','h','N','M','eps');
     
-    [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDadapEps(Nx(ii),13,M(ii),fit);
-    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time EU adapEps')
-    filename=['BSeuCallbasket2D_RBFFDadapEps_','ep',num2str(13),'Nx',num2str(Nx(ii))];
+     [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDadapEpsavg(Nx(ii),13,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time EU adapEpsavg')
+    filename=['BSeuCallbasket2D_RBFFDadapEpsavg_','ep',num2str(13),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
@@ -110,15 +114,15 @@ for ii=1:numel(Nx)
     filename=['BSamPutbasket2D_RBFFDreg_','ep',num2str(13),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
     
-    [u,err,tim,s,h,N,~] = BSamPutbasket2D_RBFFDadapEps(Nx(ii),13,M(ii),fit);
-    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time AM adapEps')
-    filename=['BSamPutbasket2D_RBFFDadapEps_','ep',num2str(13),'Nx',num2str(Nx(ii))];
+    [u,err,tim,s,h,N,~] = BSamPutbasket2D_RBFFDadapEpsmin(Nx(ii),13,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time AM adapEpsmin')
+    filename=['BSamPutbasket2D_RBFFDadapEpsmin_','ep',num2str(13),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
     
-    
-    
-    
-    
+    [u,err,tim,s,h,N,~] = BSamPutbasket2D_RBFFDadapEpsavg(Nx(ii),13,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h),', E = ', num2str(max(abs(err)))],'Time AM adapEpsavg')
+    filename=['BSamPutbasket2D_RBFFDadapEpsavg_','ep',num2str(13),'Nx',num2str(Nx(ii))];
+    save(filename,'u','err','tim','s','h','N','M','eps');
     
     
      %% RBF-FD n=25
@@ -132,14 +136,14 @@ for ii=1:numel(Nx)
     filename=['BSeuCallbasket2D_RBFFDreg_','ep',num2str(25),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
     
-    %     [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDstag(Nx(ii),25,eps,M);
-    %     display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h)],'Time EU stag')
-    %     filename=['BSeuCallbasket2D_RBFFDstag_','ep',num2str(25),'Nx',num2str(Nx(ii))];
-    %     save(filename,'u','err','tim','s','h','N','M','eps');
+    [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDadapEpsmin(Nx(ii),25,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h), ', E = ', num2str(max(abs(err)))],'Time EU adapEpsmin')
+    filename=['BSeuCallbasket2D_RBFFDadapEpsmin_','ep',num2str(25),'Nx',num2str(Nx(ii))];
+    save(filename,'u','err','tim','s','h','N','M','eps');
     
-    [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDadapEps(Nx(ii),25,M(ii),fit);
-    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h), ', E = ', num2str(max(abs(err)))],'Time EU adapEps')
-    filename=['BSeuCallbasket2D_RBFFDadapEps_','ep',num2str(25),'Nx',num2str(Nx(ii))];
+     [u,err,tim,s,h,N,~] = BSeuCallbasket2D_RBFFDadapEpsavg(Nx(ii),25,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h), ', E = ', num2str(max(abs(err)))],'Time EU adapEpsavg')
+    filename=['BSeuCallbasket2D_RBFFDadapEpsavg_','ep',num2str(25),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
@@ -149,9 +153,14 @@ for ii=1:numel(Nx)
     filename=['BSamPutbasket2D_RBFFDreg_','ep',num2str(25),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
     
-    [u,err,tim,s,h,N,~] = BSamPutbasket2D_RBFFDadapEps(Nx(ii),25,M(ii),fit);
-    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h), ', E = ', num2str(max(abs(err)))],'Time AM adapEps')
-    filename=['BSamPutbasket2D_RBFFDadapEps_','ep',num2str(25),'Nx',num2str(Nx(ii))];
+    [u,err,tim,s,h,N,~] = BSamPutbasket2D_RBFFDadapEpsmin(Nx(ii),25,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h), ', E = ', num2str(max(abs(err)))],'Time AM adapEpsmin')
+    filename=['BSamPutbasket2D_RBFFDadapEpsmin_','ep',num2str(25),'Nx',num2str(Nx(ii))];
+    save(filename,'u','err','tim','s','h','N','M','eps');
+    
+    [u,err,tim,s,h,N,~] = BSamPutbasket2D_RBFFDadapEpsavg(Nx(ii),25,M(ii),fit);
+    display([num2str(tim),' s for Nx = ',num2str(Nx(ii)),', h = ',num2str(h), ', E = ', num2str(max(abs(err)))],'Time AM adapEpsavg')
+    filename=['BSamPutbasket2D_RBFFDadapEpsavg_','ep',num2str(25),'Nx',num2str(Nx(ii))];
     save(filename,'u','err','tim','s','h','N','M','eps');
     
 end
