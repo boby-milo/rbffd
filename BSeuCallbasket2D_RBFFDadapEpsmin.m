@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCallbasket2D_RBFFDadapEps(Nx,n,M,fit)
+function [u,err,tim,x,dx,N,W] = BSeuCallbasket2D_RBFFDadapEpsmin(Nx,n,M,fit)
 %% 2D EU Call RBF-FD with BDF2
 % 2016-02-04 sparse
 load('UrefEU.mat')

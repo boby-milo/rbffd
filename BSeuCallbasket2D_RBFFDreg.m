@@ -4,9 +4,6 @@ function [u,err,tim,x,dx,N,W] = BSeuCallbasket2D_RBFFDreg(Nx,n,ep,M)
 load('UrefEU.mat')
 
 tic
-%% Parameters
-phi='gs';
-
 %% Model
 r=0.03;
 sig1=0.15;
@@ -73,6 +70,7 @@ u=u0';
 % pause()
 
 %% RBF
+phi='gs';
 s = [xvec' yvec'];
 W = BSweights2Drbffd(r,sig1,sig2,rho,s,N,n,indin,phi,ep);
 I = speye(size(W));

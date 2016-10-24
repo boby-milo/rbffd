@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSamPutbasket2D_RBFFDadapEpsAvg(Nx,n,M)
+function [u,err,tim,x,dx,N,W] = BSamPutbasket2D_RBFFDadapEpsavg(Nx,n,M,fit)
 %% 2D AM Put RBF-FD with BDF2
 % 2016-02-04 sparse
 load('UrefAM.mat')
@@ -9,11 +9,11 @@ phi='gs';
 
 switch n
     case 9
-        gamma=0.011; gamma=3*gamma;
+        gamma=0.011; gamma=fit*gamma;
     case 13
-        gamma=0.0145; gamma=3*gamma;
+        gamma=0.0145; gamma=fit*gamma;
     case 25
-        gamma=0.0450; gamma=3*gamma;
+        gamma=0.0450; gamma=fit*gamma;
 end
 
 %% Model
