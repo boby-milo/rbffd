@@ -73,51 +73,9 @@ u=u0';
 % pause()
 
 %% RBF
-s=[xvec' yvec'];
-
-% Weights
-indc=findKNearestNeighbors(s,s,n);
-
-iind=repmat(indin,n,1); iind=iind(:); %n*N
-jind=transpose(indc(indin,:)); jind=jind(:);%n*N
-Wval=zeros(n,numel(indin));  %n*N
-
-% internal points {
-bb=0;
-for ii=indin
-    bb=bb+1;
-%     ii
-    %     showsten(1,Nx,xvec,yvec,indc); pause()
-    sc=[xvec(ii),yvec(ii)]; xc=sc(:,1); yc=sc(:,2);
-    se=s(indc(ii,:),:);
-
-    Rc=xcdist(se,se,1);
-    A=RBFmat(phi,ep,Rc,'0',1);
-
-    Ax=RBFmat(phi,ep,Rc,'1',1);
-    Ay=RBFmat(phi,ep,Rc,'1',2);
-
-    Axx=RBFmat(phi,ep,Rc,'2',1);
-    Ayy=RBFmat(phi,ep,Rc,'2',2);
-    Axy=RBFmat(phi,ep,Rc,'m2',1:2);
-
-    l=transpose(-r*A(1,:)...
-        +r*xc'.*Ax(1,:)+r*yc'.*Ay(1,:)...
-        +0.5*sig1^2*xc'.^2.*Axx(1,:)...
-        +0.5*sig2^2*yc'.^2.*Ayy(1,:)...
-        +rho*sig1*sig2*xc'.*yc'.*Axy(1,:));
-
-    wc=A\l;
-    %     wc=rbffd2(ii,xc,yc,indc(ii,:),r,sig1,sig2,rho,A,Ax,Ay,Axx,Ayy,Axy);
-
-    Wval(:,bb)=wc;
-end
-% } internal points
-Wval=Wval(:);
-W=sparse(iind,jind,Wval,N,N);
-
-%         display('Weights completed');
-I=speye(size(W));
+s = [xvec' yvec'];
+W = BSweights2Drbffd(r,sig1,sig2,rho,s,N,n,indin,phi,ep);
+I = speye(size(W));
 
 %% Integration
 % BDF-1

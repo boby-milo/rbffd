@@ -11,16 +11,11 @@ r=0.03; %interest
 sig=0.15; %volatility
 
 %% Grid
-% N=8001;
 x=transpose(linspace(0,4,N));
 dx=x(2)-x(1);
 
 indin=2:N-1;
 
-% n=3; %stencil size
-m=round((n-1)/2);
-
-% M=100000;
 dt=T/(M-1);
 % t=T:-dt:0;
 
@@ -29,102 +24,10 @@ u=max(Kx-x,zeros(N,1)); %u0=u;
 lambda=zeros(N,1);
 
 %% RBF
-phi='gs';
+phi ='gs';
+W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep);
 
-Rc=zeros(N,2*n-1,2);
-
-index=1:n-1;
-Rc(index,1:n+index-1,:)=xcdist(x(index),x(1:n+index-1),1);
-
-index=n:N-n+1;
-Rc(index,:,:)=xcdist(x(index),x(index-n+1:index+n-1),1);
-
-index=N-n+2:N;
-Rc(index,index-N+n:2*n-1,:)=xcdist(x(index),x(index-n+1:N),1);
-
-A=RBFmat(phi,ep,Rc,'0',1);
-Ax=RBFmat(phi,ep,Rc,'1',1);
-Axx=RBFmat(phi,ep,Rc,'2',1);
-
-A = repmat(A(n,:),[N 1]);
-A = spdiags(A,-n+1:n-1,N,N);
-Ax = repmat(Ax(n,:),[N 1]);
-Ax = spdiags(Ax,-n+1:n-1,N,N);
-Axx = repmat(Axx(n,:),[N 1]);
-Axx = spdiags(Axx,-n+1:n-1,N,N);
-
-%% Weights
-iind=repmat(indin,n,1); iind=iind(:);
-jind=zeros(n,N-2);
-Wval=zeros(n,N-2);
-
-lc=zeros(n+1,1);
-
-bb=0;
-for ii=2:m
-    xc=x(ii);
-    indc=1:n;
-    
-    o=ones(1,n);
-    Ac=[A(indc,indc), transpose(o);
-        o, 0];
-    lc(1:n,1)=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    lc(n+1,1)=-r;
-    wc=Ac\lc;
-    Wval(:,ii-1)=wc(1:end-1);
-    
-    %     Ac=A(indc,indc);
-    %     lc=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    %     wc=Ac\lc;
-    %     Wval(:,ii-1)=wc;
-    
-    jind(:,ii-1)=indc';
-end
-
-for ii=(m+1):(N-m)
-    xc=x(ii);
-    indc=ii-m:ii+m;
-    
-    o=ones(1,n);
-    Ac=[A(indc,indc), transpose(o);
-        o, 0];
-    lc(1:n,1)=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    lc(n+1,1)=-r;
-    wc=Ac\lc;
-    Wval(:,ii-1)=wc(1:end-1);
-    
-    %     Ac=A(indc,indc);
-    %     lc=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    %     wc=Ac\lc;
-    %     Wval(:,ii-1)=wc;
-    
-    jind(:,ii-1)=indc';
-end
-
-for ii=(N-m+1):(N-1)
-    xc=x(ii);
-    indc=N-n+1:N;
-    
-    o=ones(1,n);
-    Ac=[A(indc,indc), transpose(o);
-        o, 0];
-    lc(1:n,1)=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    lc(n+1,1)=-r;
-    wc=Ac\lc;
-    Wval(:,ii-1)=wc(1:end-1);
-    
-    %     Ac=A(indc,indc);
-    %     lc=transpose(-r*A(ii,indc)+r*xc.*Ax(ii,indc)+0.5*xc.^2.*sig^2.*Axx(ii,indc));
-    %     wc=Ac\lc;
-    %     Wval(:,ii-1)=wc;
-    
-    jind(:,ii-1)=indc';
-end
-jind=jind(:);
-Wval=Wval(:);
-W=sparse(iind,jind,Wval,N,N);
-
-%% Integration
+%% Integration with Operator Splitting
 I=speye(N);
 
 %BDF-1
