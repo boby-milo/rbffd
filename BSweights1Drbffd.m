@@ -81,4 +81,8 @@ end
 jind=jind(:);
 Wval=Wval(:);
 W=sparse(iind,jind,Wval,N,N);
+<<<<<<< HEAD
 end
+=======
+end
+>>>>>>> experiment
