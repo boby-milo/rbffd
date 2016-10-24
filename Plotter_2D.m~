@@ -164,7 +164,7 @@ loglog(hvec,errvec,'g-.*');
 % xlim([1e-2 1e-0])
 axis tight
 ylim([1e-5 1e-1])
-legend('FD','adap9','adap13','adap25','reg9','reg13','reg25')
+legend('FD','adapmin9','adapmin13','adap25','reg9','reg13','reg25')
 title('BSeuCallbasket2D')
 xlabel('h')
 ylabel('\Deltau')
