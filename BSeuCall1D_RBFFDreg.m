@@ -1,7 +1,5 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg(N,n,ep,M)
-%K,T,r,sig,M
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg(N,n,ep,M,parallel)
 %% 1D European Call RBF-FD
-% Copyright 2015, Slobodan Milovanovic
 % 2016-02-06
 
 tic
@@ -26,7 +24,8 @@ u=max(x-Kx,zeros(N,1)); %u0=u;
 
 %% RBF
 phi = 'gs';
-W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep);
+% parallel = 0;
+W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep,parallel);
 
 %% Integration
 I=speye(N);

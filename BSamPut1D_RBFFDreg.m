@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSamPut1D_RBFFDreg(N,n,ep,M)
+function [u,err,tim,x,dx,N,W] = BSamPut1D_RBFFDreg(N,n,ep,M,parallel)
 %% 1D American Put RBF-FD
 % 2016-02-06
 
@@ -25,7 +25,8 @@ lambda=zeros(N,1);
 
 %% RBF
 phi ='gs';
-W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep);
+% parallel = 0;
+W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep,parallel);
 
 %% Integration with Operator Splitting
 I=speye(N);

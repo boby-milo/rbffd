@@ -1,6 +1,15 @@
-function W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep)
+function W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep,parallel)
 % Constructs a BS differentiation matrix W from 1D grid x,
 %stencil size n.
+
+if parallel
+    p = gcp();
+    argfor = p.NumWorkers;
+else
+    p = gcp('nocreate');
+    delete(p);
+    argfor = 0;
+end
 
 m=round((n-1)/2);
 
@@ -14,15 +23,19 @@ for ii=2:m
     indc=1:n;
     a=ii;
     
-    [Wval, jind] = RBFelements(ii,x,xc,n,indc,phi,ep,r,sig,jind,Wval,a);
+    wc = RBFelements(x,xc,n,indc,phi,ep,r,sig,a);
+    Wval(:,ii-1)=wc(1:end-1);
+    jind(:,ii-1)=indc';
 end
 
-for ii=(m+1):(N-m)
+parfor (ii=(m+1):(N-m), argfor)
     xc=x(ii);
     indc=ii-m:ii+m;
     a=m+1;
     
-    [Wval, jind] = RBFelements(ii,x,xc,n,indc,phi,ep,r,sig,jind,Wval,a);
+    wc = RBFelements(x,xc,n,indc,phi,ep,r,sig,a);
+    Wval(:,ii-1)=wc(1:end-1);
+    jind(:,ii-1)=indc';
 end
 
 for ii=(N-m+1):(N-1)
@@ -30,7 +43,9 @@ for ii=(N-m+1):(N-1)
     indc=N-n+1:N;
     a=ii-N+n;
     
-    [Wval, jind] = RBFelements(ii,x,xc,n,indc,phi,ep,r,sig,jind,Wval,a);
+    wc = RBFelements(x,xc,n,indc,phi,ep,r,sig,a);
+    Wval(:,ii-1)=wc(1:end-1);
+    jind(:,ii-1)=indc';
 end
 
 jind=jind(:);
@@ -38,7 +53,7 @@ Wval=Wval(:);
 W=sparse(iind,jind,Wval,N,N);
 end
 
-function [Wval, jind] = RBFelements(ii,x,xc,n,indc,phi,ep,r,sig,jind,Wval,a)
+function wc = RBFelements(x,xc,n,indc,phi,ep,r,sig,a)
 lc=zeros(n+1,1);
 
 Rc=xcdist(x(indc),x(indc),1);
@@ -59,9 +74,13 @@ lc(1:n,1)=transpose(-r*A(a,:)+r*xc.*Ax(a,:)+0.5*xc.^2.*sig^2.*Axx(a,:));
 lc(n+1,1)=-r;
 
 wc=Ac\lc;
+end
 
-Wval(:,ii-1)=wc(1:end-1);
-
-jind(:,ii-1)=indc';
-
+function arg = getParforArg()
+p = gcp('nocreate'); % get the pool object if it exists, but never open a pool
+if isempty(p)
+  arg = 0;
+else
+  arg = p.NumWorkers;
+end
 end
