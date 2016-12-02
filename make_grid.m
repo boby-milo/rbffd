@@ -24,7 +24,8 @@ switch g.dim
                 s.indff = g.N;
                 s.type = g.type;
                 s.N = g.N;
+                s.h = s.x(2)-s.x(1);
+                return;
         end
 end
 end
-

@@ -11,5 +11,6 @@ function [u] = payoff_function(c,s)
 switch c.payoff
     case 'EUcall'
         u = max(s.x-c.K,0);
+        return;
 end
 end
