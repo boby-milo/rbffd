@@ -14,7 +14,7 @@ switch c.payoff
         u = max(s.x - c.K, 0);
         return;
         
-    case {'EUCallbasket', 'AMcallbasket'}
+    case {'EUcallBasket', 'AMcallBasket'}
         u = max((1/s.dim)*sum(s.x,2) - c.K, 0);
         return;
 end
