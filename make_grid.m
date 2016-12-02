@@ -1,27 +1,29 @@
-function [x,ind,indin,indcf,indff] = make_grid(dim,type,N,smax)
+function [s] = make_grid(g)
 %Creates a computational grid.
-%Inputs:
-%   dim: 1, 2, 3;
-%   type: 'uniform';
-%   N: number of points;
-%   smax: far field boundary.
+%Inputs: g
+%   g.dim: 1, 2, 3;
+%   g.type: 'uniform';
+%   g.N: number of points;
+%   g.smax: far field boundary.
 %Outputs:
-%   x: node coordinates;
-%   ind: indices of all nodes;
-%   indin: indices of nodes inside the domain;
-%   indcf: indices of nodes at close field boundary;
-%   indff: indices of nodes at far field boundary.
+%   s.x: node coordinates;
+%   s.ind: indices of all nodes;
+%   s.indin: indices of nodes inside the domain;
+%   s.indcf: indices of nodes at close field boundary;
+%   s.indff: indices of nodes at far field boundary.
 
 %% Grid
-switch dim
+switch g.dim
     case 1
-        switch type
+        switch g.type
             case 'uniform'
-                x = transpose(linspace(0,smax,N));
-                ind = 1:N;
-                indin = 2:N-1;
-                indcf = 1;
-                indff = N;
+                s.x = transpose(linspace(0,g.smax,g.N));
+                s.ind = 1:g.N;
+                s.indin = 2:(g.N-1);
+                s.indcf = 1;
+                s.indff = g.N;
+                s.type = g.type;
+                s.N = g.N;
         end
 end
 end

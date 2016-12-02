@@ -1,13 +1,15 @@
-function [u] = payoff_function(payoff,x)
-%Creates a computational grid.
-%Inputs:
-%   payoff: 'EUcall';
+function [u] = payoff_function(c,s)
+%Sets the terminal condition on the grid.
+%Inputs: c, s
+%   c.payoff: 'EUcall'
+%   c.K: strike
+%   c.T: maturity
 %   x: node coordinates returned by make_grid;
 %Outputs:
 %   u: values of payoff at node coordinates x;
 
-switch payoff
+switch c.payoff
     case 'EUcall'
-        u = max(x-K,0);
+        u = max(s.x-c.K,0);
 end
 end
