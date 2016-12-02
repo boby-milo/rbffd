@@ -7,10 +7,10 @@ dbstop if error
 % %% Test EUcall
 % 
 % %#% Setup
-% [c,p,m,g] = default_init();
+% [c,p,m,s] = default_init();
 % 
 % %#% Evaluation
-% s = make_grid(g);
+% s = make_grid(s);
 % s.u0 = payoff_function(c,s);
 % s.W = differentiation_matrix(m,p,s);
 % [s.u,m] = time_integrate(m,c,p,s);
@@ -18,16 +18,19 @@ dbstop if error
 %% Test EUbasket
 
 %#% Setup
-[c,p,m,g] = default_init();
+[c,p,m,s] = default_init();
 c.payoff = 'EUbasket';
 
-g.dim = 2;
-g.smax = 8*c.K;
+p.sig = [0.3, 0.3];
+p.rho = 0.5;
+
+s.dim = 2;
+s.smax = 8*c.K;
 
 %#% Evaluation
-s = make_grid(g);
+s = make_grid(s);
 s.u0 = payoff_function(c,s);
-% s.W = differentiation_matrix(m,p,s);
+s.W = differentiation_matrix(m,p,s);
 % [s.u,m] = time_integrate(m,c,p,s);
 
 figure(1)

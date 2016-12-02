@@ -1,4 +1,4 @@
-function [c,p,m,g] = default_init()
+function [c,p,m,s] = default_init()
 %Constructor that initiates default problem setup
 %   c: contract
 %   p: parameters
@@ -22,9 +22,9 @@ m.time.order = 1;
 m.time.M = 10;
 
 %grid
-g.type = 'uniform';
-g.dim = 1;
-g.N = 100;
-g.smax = 4*c.K;
+s.type = 'uniform';
+s.dim = 1;
+s.N = 100;
+s.xmax = 4*c.K;
 end
 

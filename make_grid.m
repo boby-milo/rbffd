@@ -1,10 +1,10 @@
-function [s] = make_grid(g)
+function [s] = make_grid(s)
 %Creates a computational grid.
-%Inputs: g
-%   g.dim: 1, 2, 3;
-%   g.type: 'uniform';
-%   g.N: number of points;
-%   g.smax: far field boundary.
+%Inputs: s
+%   s.dim: 1, 2, 3;
+%   s.type: 'uniform';
+%   s.N: number of points;
+%   s.smax: far field boundary.
 %Outputs:
 %   s.x: node coordinates;
 %   s.ind: indices of all nodes;
@@ -13,18 +13,17 @@ function [s] = make_grid(g)
 %   s.indff: indices of nodes at far field boundary.
 
 %% Grid
-switch g.dim
-    
+
+switch s.dim
     case 1
-        switch g.type
+        switch s.type
             case 'uniform'
-                s.x = transpose(linspace(0,g.smax,g.N));
-                s.ind = 1:g.N;
-                s.indin = 2:(g.N-1);
+                s.x = transpose(linspace(0,s.smax,s.N));
+                s.ind = 1:s.N;
+                s.indin = 2:(s.N-1);
                 s.indcf = 1;
-                s.indff = g.N;
-                s.type = g.type;
-                s.N = g.N;
+                s.indff = s.N;
+                s.N = s.N;
                 s.h = s.x(2)-s.x(1);
                 return;
         end
@@ -32,10 +31,10 @@ switch g.dim
         
         
     case 2
-        switch g.type
+        switch s.type
             case 'uniform'
-                x = linspace(0,g.smax,g.N);
-                y = linspace(0,g.smax,g.N);
+                x = linspace(0,s.smax,s.N);
+                y = linspace(0,s.smax,s.N);
                 
                 [X,Y] = meshgrid(x,y);
                 xvec = X(:);
@@ -43,18 +42,19 @@ switch g.dim
                 
                 s.ind = 1:numel(xvec);
                 
-%                 indle = [1:g.N];
-%                 inddo = [1:g.N:g.N^2-g.N+1];
-                indup = [g.N:g.N:g.N^2];
-                indri = [g.N^2-g.N+1:1:g.N^2];
+%                 indle = [1:s.N];
+%                 inddo = [1:s.N:s.N^2-s.N+1];
+                indup = [s.N:s.N:s.N^2];
+                indri = [s.N^2-s.N+1:1:s.N^2];
                 
                 s.indcf = 1;
                 s.indff = [indup(1:end-1),indri];
                 
                 s.indin = s.ind; s.indin([s.indff,s.indcf]) = [];
                 
-                s.N = numel(xvec);
+                s.Ntot = numel(xvec);
                 s.x = [xvec,yvec];
+                s.h = [s.x(2,1) - s.x(1,1), s.x(2,2) - s.x(1,2)];
                 return;
         end
 end
