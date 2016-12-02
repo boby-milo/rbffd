@@ -4,16 +4,21 @@ close all
 
 dbstop if error
 
-% %% Test EUcall
-% 
-% %#% Setup
-% [c,p,m,s] = default_init();
-% 
-% %#% Evaluation
-% s = make_grid(s);
-% s.u0 = payoff_function(c,s);
-% s.W = differentiation_matrix(m,p,s);
-% [s.u,m] = time_integrate(m,c,p,s);
+%% Test EUcall
+
+%#% Setup
+[c,p,m,s] = default_init();
+
+%#% Evaluation
+s = make_grid(s);
+s.u0 = payoff_function(c,s);
+s.W = differentiation_matrix(m,p,s);
+[s.u,m] = time_integrate(m,c,p,s);
+
+figure()
+plot(s.x,s.u0,s.x,s.u)
+
+disp('EUcall test passed!')
 
 %% Test EUbasket
 
@@ -32,8 +37,9 @@ s = make_grid(s);
 s.u0 = payoff_function(c,s);
 s.W = differentiation_matrix(m,p,s);
 % [s.u,m] = time_integrate(m,c,p,s);
+disp('EUbasket test passed!')
 
-figure(1)
+figure()
 clf
 plot(s.x(s.indff,1),s.x(s.indff,2),'b^','MarkerFaceColor','auto')
 hold on
@@ -44,7 +50,7 @@ axis equal
 axis tight
 hold off
 
-figure(2)
+figure()
 tri = delaunay(s.x(:,1),s.x(:,2));
 trisurf(tri, s.x(:,1),s.x(:,2),s.u0);
 shading interp

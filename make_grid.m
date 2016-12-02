@@ -4,7 +4,7 @@ function [s] = make_grid(s)
 %   s.dim: 1, 2, 3;
 %   s.type: 'uniform';
 %   s.N: number of points;
-%   s.smax: far field boundary.
+%   s.xmax: far field boundary.
 %Outputs:
 %   s.x: node coordinates;
 %   s.ind: indices of all nodes;
@@ -18,7 +18,7 @@ switch s.dim
     case 1
         switch s.type
             case 'uniform'
-                s.x = transpose(linspace(0,s.smax,s.N));
+                s.x = transpose(linspace(0,s.xmax,s.N));
                 s.ind = 1:s.N;
                 s.indin = 2:(s.N-1);
                 s.indcf = 1;
@@ -33,8 +33,8 @@ switch s.dim
     case 2
         switch s.type
             case 'uniform'
-                x = linspace(0,s.smax,s.N);
-                y = linspace(0,s.smax,s.N);
+                x = linspace(0,s.xmax,s.N);
+                y = linspace(0,s.xmax,s.N);
                 
                 [X,Y] = meshgrid(x,y);
                 xvec = X(:);

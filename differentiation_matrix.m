@@ -25,8 +25,8 @@ switch m.space.type
                             cc = 0.5*p.sig^2*s.x.^2/s.h^2 +0.5*p.r*s.x/s.h;
                             
                             W = gallery('tridiag',aa(2:end),bb,cc(1:end-1));
-                            W(1,:)=zeros(1,s.Ntot);
-                            W(end,:)=zeros(1,s.Ntot);
+                            W(1,:)=zeros(1,s.N);
+                            W(end,:)=zeros(1,s.N);
                             return;
                             
                         case 4
