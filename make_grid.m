@@ -43,8 +43,8 @@ switch g.dim
                 
                 s.ind = 1:numel(xvec);
                 
-                indle = [1:g.N];
-                inddo = [1:g.N:g.N^2-g.N+1];
+%                 indle = [1:g.N];
+%                 inddo = [1:g.N:g.N^2-g.N+1];
                 indup = [g.N:g.N:g.N^2];
                 indri = [g.N^2-g.N+1:1:g.N^2];
                 
@@ -55,6 +55,7 @@ switch g.dim
                 
                 s.N = numel(xvec);
                 s.x = [xvec,yvec];
+                return;
         end
 end
 end

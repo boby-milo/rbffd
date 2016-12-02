@@ -9,8 +9,14 @@ function [u] = payoff_function(c,s)
 %   u: values of payoff at node coordinates x;
 
 switch c.payoff
+    
     case 'EUcall'
-        u = max(s.x-c.K,0);
+        u = max(s.x - c.K, 0);
+        return;
+        
+    case 'EUbasket'
+        dim = size(s.x,2);
+        u = max((1/dim)*sum(s.x,2) - c.K, 0);
         return;
 end
 end

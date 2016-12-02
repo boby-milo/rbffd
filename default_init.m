@@ -19,12 +19,12 @@ m.space.type = 'FD';
 m.space.order = 2;
 m.time.type = 'BDF';
 m.time.order = 1;
-m.time.M = 100;
+m.time.M = 10;
 
 %grid
 g.type = 'uniform';
 g.dim = 1;
-g.N = 1000;
+g.N = 100;
 g.smax = 4*c.K;
 end
 
