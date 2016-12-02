@@ -51,6 +51,7 @@ switch m.space.type
                             
                             diagind = [-s.N-1, -s.N, -s.N+1, -1, 0, 1, s.N-1, s.N, s.N+1];
                             W = spdiags(C,diagind,s.Ntot,s.Ntot);
+                            W(s.indff,:)=[]; W(:,s.indff)=[];
                             return;
                             
                         case 4

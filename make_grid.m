@@ -23,7 +23,7 @@ switch s.dim
                 s.indin = 2:(s.N-1);
                 s.indcf = 1;
                 s.indff = s.N;
-                s.N = s.N;
+                s.Ntot = s.N;
                 s.h = s.x(2)-s.x(1);
                 return;
         end

@@ -13,7 +13,7 @@ dbstop if error
 s = make_grid(s);
 s.u0 = payoff_function(c,s);
 s.W = differentiation_matrix(m,p,s);
-[s.u,m] = time_integrate(m,c,p,s);
+[s.u, m] = time_integrate(c,p,m,s);
 
 figure()
 plot(s.x,s.u0,s.x,s.u)
@@ -24,7 +24,7 @@ disp('EUcall test passed!')
 
 %#% Setup
 [c,p,m,s] = default_init();
-c.payoff = 'EUbasket';
+c.payoff = 'EUcallBasket';
 
 p.sig = [0.3, 0.3];
 p.rho = 0.5;
@@ -36,8 +36,8 @@ s.smax = 8*c.K;
 s = make_grid(s);
 s.u0 = payoff_function(c,s);
 s.W = differentiation_matrix(m,p,s);
-% [s.u,m] = time_integrate(m,c,p,s);
-disp('EUbasket test passed!')
+% [s.u,m] = time_integrate(c,p,m,s);
+disp('EUcallBasket test passed!')
 
 figure()
 clf

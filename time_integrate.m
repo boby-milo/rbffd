@@ -1,4 +1,4 @@
-function [u,m] = time_integrate(m,c,p,s)
+function [u,m] = time_integrate(c,p,m,s)
 %Integrates the equation in time.
 %Inputs:
 %   m.time.type: 'BDF';
@@ -10,7 +10,8 @@ function [u,m] = time_integrate(m,c,p,s)
 dt = c.T/m.time.M;
 m.time.dt = dt;
 
-u = zeros(size(s.x));
+u = zeros(s.Ntot,1);
+
 switch m.time.type
     case 'BDF'
         I = speye(s.N);
@@ -18,14 +19,13 @@ switch m.time.type
         u1 = s.u0;
         
         switch m.time.order
-            
             case 1
                 rcm = symrcm(A);
                 A = A(rcm,rcm);
                 [L,U] = lu(A);
                 
                 for ii = 2 : m.time.M
-   
+                    
                     b = u1;
                     b(end) = s.x(end) - c.K*exp(-p.r*(ii-1)*dt);
                     
@@ -36,8 +36,6 @@ switch m.time.type
                     %u = max(u,0);
                 end
                 return;
-                
-                
                 
             case 2
                 b = u1;
