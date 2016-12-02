@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSamPut1D_RBFFDreg(N,n,ep,M)
+function [u,err,tim,x,dx,N,W] = BSamPut1D_RBFFDreg(N,n,ep,M,parallel)
 %% 1D American Put RBF-FD
 % 2016-02-06
 
@@ -56,17 +56,17 @@ A=A(rcm,rcm);
 for ii=3:M
     u2=u1;
     u1=u;
-    
+
     b=(4/3)*u1 - (1/3)*u2 + (2/3)*dt*lambda;
-    
+
     util(rcm)=L1\b(rcm);
     util(rcm)=U1\util(rcm);
     lambdaold=lambda;
     lambda=zeros(N,1);
-    
+
     u=util+(2/3)*dt*(lambda-lambdaold);
-    
-    
+
+
     for jj=1:N
         if u(jj)-(Kx-x(jj))<0
             u(jj)=Kx-x(jj);
@@ -74,7 +74,7 @@ for ii=3:M
         end
     end
     u=max(u,0);
-    
+
 end
 tim=toc;
 %% Error

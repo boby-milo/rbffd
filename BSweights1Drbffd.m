@@ -36,7 +36,6 @@ lc=zeros(n+1,1);
 for ii=2:m
     xc=x(ii);
     indc=1:n;
-    
     o=ones(1,n);
     Ac=[A(indc,indc), transpose(o);
         o, 0];
@@ -44,14 +43,12 @@ for ii=2:m
     lc(n+1,1)=-r;
     wc=Ac\lc;
     Wval(:,ii-1)=wc(1:end-1);
-    
     jind(:,ii-1)=indc';
 end
 
 for ii=(m+1):(N-m)
     xc=x(ii);
     indc=ii-m:ii+m;
-    
     o=ones(1,n);
     Ac=[A(indc,indc), transpose(o);
         o, 0];
@@ -59,14 +56,12 @@ for ii=(m+1):(N-m)
     lc(n+1,1)=-r;
     wc=Ac\lc;
     Wval(:,ii-1)=wc(1:end-1);
-    
     jind(:,ii-1)=indc';
 end
 
 for ii=(N-m+1):(N-1)
     xc=x(ii);
     indc=N-n+1:N;
-    
     o=ones(1,n);
     Ac=[A(indc,indc), transpose(o);
         o, 0];
@@ -74,7 +69,6 @@ for ii=(N-m+1):(N-1)
     lc(n+1,1)=-r;
     wc=Ac\lc;
     Wval(:,ii-1)=wc(1:end-1);
-    
     jind(:,ii-1)=indc';
 end
 
