@@ -24,8 +24,7 @@ u=max(x-Kx,zeros(N,1)); %u0=u;
 
 %% RBF
 phi = 'gs';
-% parallel = 0;
-W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep,parallel);
+W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep);
 
 %% Integration
 I=speye(N);
@@ -49,10 +48,10 @@ A=A(rcm,rcm);
 for ii=3:M
     u2=u1;
     u1=u;
-    
+
     b=((4/3)*u1-(1/3)*u2);
     b(end)=x(end)-Kx*exp(-r*(ii-1)*dt);
-    
+
     u(rcm)=L1\b(rcm);
     u(rcm)=U1\u(rcm);
     u=max(u,0);
