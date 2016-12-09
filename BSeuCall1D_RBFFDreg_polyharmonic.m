@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg(N,n,ep,M)
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_polyharmonic(N,n,ep,M)
 %% 1D European Call RBF-FD
 % 2016-02-06
 
