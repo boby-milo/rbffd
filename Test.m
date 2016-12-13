@@ -4,55 +4,83 @@ close all
 
 dbstop if error
 
-%% Test EUcall
+%% Test default_init
+clear
+%% Test make_grid
+clear
+%% Test payoff_function
+clear
+close all
 
+[contract,parameter,method,grid] = default_init();
+grid = make_grid(grid);
+
+% 1D
+smoothing = 0;
+[unatural] = payoff_function(contract,grid, smoothing);
+
+smoothing = 1;
+[usmooth] = payoff_function(contract,grid, smoothing);
+
+figure(1)
+plot(grid.x,unatural, grid.x, usmooth);
+
+figure(2)
+plot(grid.x,unatural-usmooth);
+
+disp('payoff_function: Passed!')
+
+%% Test EUcall
+clear
+close all
 %#% Setup
-[c,p,m,s] = default_init();
+[contract,parameter,method,grid] = default_init();
 
 %#% Evaluation
-s = make_grid(s);
-s.u0 = payoff_function(c,s);
-s.W = differentiation_matrix(m,p,s);
-[s.u, m] = time_integrate(c,p,m,s);
+grid = make_grid(grid);
+grid.u0 = payoff_function(contract,grid);
+grid.W = differentiation_matrix(method,parameter,grid);
+[grid.u, ~] = time_integrate(contract,parameter,method,grid);
 
 figure()
-plot(s.x,s.u0,s.x,s.u)
+plot(grid.x,grid.u0,grid.x,grid.u)
 
 disp('EUcall test passed!')
 
 %% Test EUbasket
-
+clear
+close all
 %#% Setup
-[c,p,m,s] = default_init();
-c.payoff = 'EUcallBasket';
+[contract,parameter,method,grid] = default_init();
+contract.payoff = 'EUcallBasket';
 
-p.sig = [0.3, 0.3];
-p.rho = 0.5;
+parameter.sig = [0.3, 0.3];
+parameter.rho = 0.5;
 
-s.dim = 2;
-s.smax = 8*c.K;
+grid.dim = 2;
+grid.smax = 8*contract.K;
 
 %#% Evaluation
-s = make_grid(s);
-s.u0 = payoff_function(c,s);
-s.W = differentiation_matrix(m,p,s);
+grid = make_grid(grid);
+grid.u0 = payoff_function(contract,grid);
+grid.W = differentiation_matrix(method,parameter,grid);
 % [s.u,m] = time_integrate(c,p,m,s);
 disp('EUcallBasket test passed!')
 
 figure()
 clf
-plot(s.x(s.indff,1),s.x(s.indff,2),'b^','MarkerFaceColor','auto')
+plot(grid.x(grid.indff,1),grid.x(grid.indff,2),'b^','MarkerFaceColor','auto')
 hold on
-plot(s.x(s.indcf,1),s.x(s.indcf,2),'rsq','MarkerFaceColor','auto')
-plot(s.x(s.indin,1),s.x(s.indin,2),'ko','MarkerFaceColor','auto')
-plot(s.x(:,1),s.x(:,2),'k.')
+plot(grid.x(grid.indcf,1),grid.x(grid.indcf,2),'rsq','MarkerFaceColor','auto')
+plot(grid.x(grid.indin,1),grid.x(grid.indin,2),'ko','MarkerFaceColor','auto')
+plot(grid.x(:,1),grid.x(:,2),'k.')
 axis equal
 axis tight
 hold off
 
 figure()
-tri = delaunay(s.x(:,1),s.x(:,2));
-trisurf(tri, s.x(:,1),s.x(:,2),s.u0);
+tri = delaunay(grid.x(:,1),grid.x(:,2));
+trisurf(tri, grid.x(:,1),grid.x(:,2),grid.u0);
 shading interp
 colorbar
 view(2)

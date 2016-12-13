@@ -1,33 +1,33 @@
-function [u,m] = time_integrate(c,p,m,s)
+function [u,method] = time_integrate(contract,parameter,method,grid)
 %Integrates the equation in time.
 %Inputs:
-%   m.time.type: 'BDF';
-%   m.time.order: 1, 2;
+%   method.time.type: 'BDF';
+%   method.time.order: 1, 2;
 
 %Outputs:
 %   u: solution at t;
 
-dt = c.T/m.time.M;
-m.time.dt = dt;
+dt = contract.T/method.time.M;
+method.time.dt = dt;
 
-u = zeros(s.Ntot,1);
+u = zeros(grid.Ntot,1);
 
-switch m.time.type
+switch method.time.type
     case 'BDF'
-        I = speye(s.N);
-        A = I - s.W*dt;
-        u1 = s.u0;
+        I = speye(grid.N);
+        A = I - grid.W*dt;
+        u1 = grid.u0;
         
-        switch m.time.order
+        switch method.time.order
             case 1
                 rcm = symrcm(A);
                 A = A(rcm,rcm);
                 [L,U] = lu(A);
                 
-                for ii = 2 : m.time.M
+                for ii = 2 : method.time.M
                     
                     b = u1;
-                    b(end) = s.x(end) - c.K*exp(-p.r*(ii-1)*dt);
+                    b(end) = grid.x(end) - contract.K*exp(-parameter.r*(ii-1)*dt);
                     
                     u(rcm) = L\b(rcm);
                     u(rcm) = U\u(rcm);
@@ -39,22 +39,22 @@ switch m.time.type
                 
             case 2
                 b = u1;
-                b(end) = s.x(end) - c.K*exp(-p.r*dt);
+                b(end) = grid.x(end) - contract.K*exp(-parameter.r*dt);
                 
                 u = A\b;
                 %u = max(u,0);
                 
                 %BDF-2
-                A = I - (2/3)*dt*s.W;
+                A = I - (2/3)*dt*grid.W;
                 rcm = symrcm(A);
                 A = A(rcm,rcm);
                 [L,U] = lu(A);
-                for ii = 3 : m.time.M
+                for ii = 3 : method.time.M
                     u2 = u1;
                     u1 = u;
                     
                     b = (4/3)*u1 - (1/3)*u2;
-                    b(end) = s.x(end) - c.K*exp(-p.r*(ii-1)*dt);
+                    b(end) = grid.x(end) - contract.K*exp(-parameter.r*(ii-1)*dt);
                     
                     u(rcm) = L\b(rcm);
                     u(rcm) = U\u(rcm);
