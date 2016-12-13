@@ -6,8 +6,25 @@ dbstop if error
 
 %% Test default_init
 clear
+close all
+[~,~,~,~] = default_init();
+
+disp('default_init: Passed!')
+
 %% Test make_grid
 clear
+close all
+
+% 1D uniform
+[contract,parameter,method,grid] = default_init();
+grid = make_grid(grid);
+
+% 2D uniform
+[contract,parameter,method,grid] = default_init();
+grid.dim = 2;
+grid = make_grid(grid);
+
+
 %% Test payoff_function
 clear
 close all
@@ -17,16 +34,23 @@ grid = make_grid(grid);
 
 % 1D
 smoothing = 0;
-[unatural] = payoff_function(contract,grid, smoothing);
+[cnatural] = payoff_function(contract,grid, smoothing);
 
 smoothing = 1;
-[usmooth] = payoff_function(contract,grid, smoothing);
+[csmooth] = payoff_function(contract,grid, smoothing);
+
+contract.payoff = 'EUput';
+smoothing = 0;
+[pnatural] = payoff_function(contract,grid, smoothing);
+
+smoothing = 1;
+[psmooth] = payoff_function(contract,grid, smoothing);
 
 figure(1)
-plot(grid.x,unatural, grid.x, usmooth);
+plot(grid.x,cnatural, grid.x, csmooth, grid.x, pnatural, grid.x, psmooth);
 
 figure(2)
-plot(grid.x,unatural-usmooth);
+plot(grid.x,cnatural - csmooth, grid.x, pnatural - psmooth);
 
 disp('payoff_function: Passed!')
 
@@ -45,7 +69,7 @@ grid.W = differentiation_matrix(method,parameter,grid);
 figure()
 plot(grid.x,grid.u0,grid.x,grid.u)
 
-disp('EUcall test passed!')
+disp('EUcall: passed!')
 
 %% Test EUbasket
 clear
@@ -65,7 +89,7 @@ grid = make_grid(grid);
 grid.u0 = payoff_function(contract,grid);
 grid.W = differentiation_matrix(method,parameter,grid);
 % [s.u,m] = time_integrate(c,p,m,s);
-disp('EUcallBasket test passed!')
+disp('EUcallBasket: passed!')
 
 figure()
 clf

@@ -19,8 +19,8 @@ switch grid.dim
         switch grid.type
             case 'uniform'
                 grid.x = transpose(linspace(0,grid.xmax,grid.N));
-                grid.ind = 1:grid.N;
-                grid.indin = 2:(grid.N-1);
+                grid.ind = transpose(1:grid.N);
+                grid.indin = transpose(2:(grid.N-1));
                 grid.indcf = 1;
                 grid.indff = grid.N;
                 grid.Ntot = grid.N;
@@ -40,7 +40,7 @@ switch grid.dim
                 xvec = X(:);
                 yvec = Y(:);
                 
-                grid.ind = 1:numel(xvec);
+                grid.ind = transpose(1:numel(xvec));
                 
 %                 indle = [1:grid.N];
 %                 inddo = [1:grid.N:grid.N^2-grid.N+1];
@@ -48,13 +48,14 @@ switch grid.dim
                 indri = grid.N^2-grid.N+1:1:grid.N^2;
                 
                 grid.indcf = 1;
-                grid.indff = [indup(1:end-1),indri];
+                grid.indff = transpose([indup(1:end-1),indri]);
                 
-                grid.indin = grid.ind; grid.indin([grid.indff,grid.indcf]) = [];
+                grid.indin = grid.ind; 
+                grid.indin([grid.indff; grid.indcf]) = [];
                 
                 grid.Ntot = numel(xvec);
                 grid.x = [xvec,yvec];
-                grid.h = [grid.x(2,1) - grid.x(1,1), grid.x(2,2) - grid.x(1,2)];
+                grid.h = [grid.x(1+grid.N,1) - grid.x(1,1), grid.x(2,2) - grid.x(1,2)];
                 return;
         end
         

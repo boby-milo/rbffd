@@ -23,6 +23,10 @@ switch contract.payoff
     case {'EUcallBasket', 'AMcallBasket'}
         u = max((1/grid.dim)*sum(grid.x,2) - contract.K, 0);
         return;
+        
+    case {'EUputBasket', 'AMputBasket'}
+        u = max(contract.K - (1/grid.dim)*sum(grid.x,2), 0);
+        return;
 end
 
 
