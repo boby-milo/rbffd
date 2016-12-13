@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg(N,n,ep,M)
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs(N,n,ep,M)
 %% 1D European Call RBF-FD
 % 2016-02-06
 
@@ -23,7 +23,7 @@ dt=T/(M-1);
 u=max(x-Kx,zeros(N,1)); %u0=u;
 
 %% RBF
-phi = 'gs';
+phi = 'phs';
 W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep);
 
 %% Integration
@@ -59,16 +59,16 @@ end
 tim=toc;
 
 %% Error
-indreg=[];
-for ii=1:length(x)
-    %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
-    if x(ii)>=1/3*Kx && x(ii)<=5/3*Kx
-        indreg=[indreg ii];
-    end
-end
-
-x=x(indreg);
-u=u(indreg);
+% indreg=[];
+% for ii=1:length(x)
+%     %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
+%     if x(ii)>=1/3*Kx && x(ii)<=5/3*Kx
+%         indreg=[indreg ii];
+%     end
+% end
+% 
+% x=x(indreg);
+% u=u(indreg);
 
 % K=100;
 x=K*x;

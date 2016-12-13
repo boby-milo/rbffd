@@ -7,7 +7,7 @@ m=round((n-1)/2);
 Rc=zeros(N,2*n-1,2);
 
 ind=1:n-1;
-Rc(ind,1:n+ind-1,:)=xcdist(x(ind),x(1:n+ind-1),1); %#ok<*BDSCI>
+Rc(ind,1:n+ind-1,:)=xcdist(x(ind),x(1:n+ind-1),1);
 
 ind=n:N-n+1;
 Rc(ind,:,:)=xcdist(x(ind),x(ind-n+1:ind+n-1),1);
