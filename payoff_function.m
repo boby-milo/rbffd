@@ -15,31 +15,34 @@ end
 
 switch contract.payoff
     case {'EUcall', 'AMcall'}
+        f = @(x) max(x - contract.K,0);
         
-        f = @(x) max(x-contract.K,0);
-        
-        if smoothing
-            a = 1/10;
-            indreg = find((grid.x >= (1-a)*contract.K) & (grid.x <= (1+a)*contract.K));
-            xind = grid.x(indreg);
-            uind = smooth4(xind,f);
-            u = f(grid.x);
-            u(indreg)=uind;
-            return;
-            
-        else
-            u = f(grid.x);
-            return;
-        end
+    case {'EUput', 'AMput'}
+        f = @(x) max(contract.K - x,0);
         
     case {'EUcallBasket', 'AMcallBasket'}
-        
-        if smoothing
-            disp('Smoothing is not implemented for high-dimensional cases.');
-            return;
-        else
-            u = max((1/grid.dim)*sum(grid.x,2) - contract.K, 0);
-            return;
-        end
+        u = max((1/grid.dim)*sum(grid.x,2) - contract.K, 0);
+        return;
 end
+
+
+if smoothing
+    if grid.dim == 1
+        a = 1/10;
+        indreg = find((grid.x >= (1-a)*contract.K) & (grid.x <= (1+a)*contract.K));
+        xind = grid.x(indreg);
+        uind = smooth4(xind,f);
+        u = f(grid.x);
+        u(indreg)=uind;
+        return;
+    else
+        disp('Higher-dimensional smoothing is not implemented.')
+        return;
+    end
+    
+else
+    u = f(grid.x);
+    return;
+end
+
 end

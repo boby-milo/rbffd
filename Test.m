@@ -12,7 +12,7 @@ clear
 clear
 close all
 
-[contract,parameter,method,grid] = default_init();
+[contract,~,~,grid] = default_init();
 grid = make_grid(grid);
 
 % 1D

@@ -44,8 +44,8 @@ switch grid.dim
                 
 %                 indle = [1:grid.N];
 %                 inddo = [1:grid.N:grid.N^2-grid.N+1];
-                indup = [grid.N:grid.N:grid.N^2];
-                indri = [grid.N^2-grid.N+1:1:grid.N^2];
+                indup = grid.N:grid.N:grid.N^2;
+                indri = grid.N^2-grid.N+1:1:grid.N^2;
                 
                 grid.indcf = 1;
                 grid.indff = [indup(1:end-1),indri];
@@ -61,7 +61,7 @@ switch grid.dim
         
         
     case 3
-        disp('Not implemented yet');
+        disp('Not implemented.');
         return;
 end
 end
