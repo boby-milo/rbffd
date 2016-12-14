@@ -5,9 +5,9 @@ clear
 dbstop if error
 
 Kmul = 4;
-M = 800; 
+M = 1000; 
 
-ru=2;
+runnumber=1;
 
 N = Kmul*[25, 50, 75, 100, 125, 150, 175, 200, 250, 300, 400, 500];
 
@@ -26,19 +26,19 @@ for ii = 1:numel(N)
     
     
     
-    m = 5;
+    k = 5;
     
     n = 19; 
 %     F4 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
-    F4 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,m,M,Kmul);
+    F4 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,k,M,Kmul);
     
 %     n = 7;
 %     F5 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
-    F5 = parfeval(@BSeuCall1D_RBFFDreg_phs_smooth,7,N(ii),n,m,M,Kmul);
+    F5 = parfeval(@BSeuCall1D_RBFFDreg_phs_smooth,7,N(ii),n,k,M,Kmul);
     
 %     n = 9;
 %     F6 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
-    F6 = parfeval(@BSeuCall1D_RBFFDreg_phs_adap_smooth,7,N(ii),n,m,M,Kmul);
+    F6 = parfeval(@BSeuCall1D_RBFFDreg_phs_adap_smooth,7,N(ii),n,k,M,Kmul);
     
     
     
@@ -89,7 +89,7 @@ for ii = 1:numel(N)
     erF2(ii) = max(abs(errF2crop{ii}));
     erF3(ii) = max(abs(errF3crop{ii}));
     
-    figure(ru)
+    figure(runnumber)
     clf
     loglog(dxF0,erF0,'-*')
     hold on
