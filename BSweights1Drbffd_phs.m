@@ -1,4 +1,4 @@
-function W = BSweights1Drbffd_phs(r,sig,x,N,n,indin,phi,ep,parallel)
+function W = BSweights1Drbffd_phs(r,sig,x,N,n,indin,phi,ep,m,parallel)
 % Constructs a BS differentiation matrix W from 1D grid x,
 %stencil size n.
 
@@ -14,8 +14,6 @@ else
     delete(p);
     argfor = 0;
 end
-
-m = floor(n/2); %number of polynomial terms;
 
 l=round((n-1)/2); %stencil distance;
 
@@ -59,7 +57,7 @@ Wval=Wval(:);
 W=sparse(iind,jind,Wval,N,N);
 end
 
-function wc = RBFelements(x,xc,n,indc,phi,ep,r,sig,a)
+function wc = RBFelements(x,xc,n,m,indc,phi,ep,r,sig,a)
 
 Rc=xcdist(x(indc),x(indc),1);
 

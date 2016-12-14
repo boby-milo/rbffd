@@ -24,7 +24,10 @@ u=max(x-Kx,zeros(N,1)); %u0=u;
 
 %% RBF
 phi = 'phs';
-W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep);
+m = floor(n/4) %number of polynomial terms;
+
+parallel = 1;
+W = BSweights1Drbffd_phs(r,sig,x,N,n,indin,phi,ep,m,parallel);
 
 %% Integration
 I=speye(N);
