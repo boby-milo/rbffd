@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs(N,n,ep,M,Kmul)
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs_smooth(N,n,ep,M,Kmul)
 %% 1D European Call RBF-FD
 % 2016-02-06
 
@@ -20,7 +20,24 @@ dt=T/(M-1);
 % t=T:-dt:0;
 
 %% Initial condition
-u=max(x-Kx,zeros(N,1)); %u0=u;
+% u=max(x-Kx,zeros(N,1)); %u0=u;
+
+fu = @(x) max(x-Kx,0);
+
+indreg=[];
+    for jj = 1:length(x)
+        %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
+        if x(jj) >= 9/10*Kx && x(jj) <= 11/10*Kx
+            indreg=[indreg jj];
+        end
+    end
+
+    xind = x(indreg);
+
+uind = smooth4adap(xind,fu);
+
+u = fu(x);
+u(indreg)=uind;
 
 %% RBF
 phi = 'phs';

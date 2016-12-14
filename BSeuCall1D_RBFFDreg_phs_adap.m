@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs(N,n,ep,M,Kmul)
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs_adap(Nx,n,ep,M,Kmul)
 %% 1D European Call RBF-FD
 % 2016-02-06
 
@@ -11,10 +11,27 @@ r=0.03; %interest
 sig=0.15; %volatility
 
 %% Grid
-x=transpose(linspace(0,Kmul,N));
-dx=x(2)-x(1);
 
-indin=2:N-1;
+% Nx=100;
+i=1:Nx;
+Ki=Kx;
+S=Kmul*Ki;
+
+g=5; %tune this! 1,2,3,4,5
+c=2*Ki/g;
+
+dxi=(1/Nx)*(asinh((S-Ki)/c)-asinh(-Ki/c));
+xi=asinh(-Ki/c)+i*dxi;
+x=[0, Ki+c*sinh(xi)]';
+
+N=numel(x);
+ind=1:N;
+indcf=1;
+indff=N;
+indin=ind; indin([indff,indcf])=[];
+
+L=Kmul;
+dx=L/(N-1);
 
 dt=T/(M-1);
 % t=T:-dt:0;
