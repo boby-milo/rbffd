@@ -36,7 +36,7 @@ end
 %stencil size
 
 parallel = 1;
-W = BSweights1Drbffd_phs_debug(r,sig,x,N,n,m,indin,phi,ep,parallel);
+W = BSweights1Drbffd_phs(r,sig,x,N,n,m,indin,phi,ep,parallel);
 
 %% Integration
 I=speye(N);

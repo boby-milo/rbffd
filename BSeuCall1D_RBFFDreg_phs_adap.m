@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs_adap(Nx,n,ep,M,Kmul)
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs_adap(Nx,p,ep,M,Kmul)
 %% 1D European Call RBF-FD
 % 2016-02-06
 
@@ -41,8 +41,19 @@ u=max(x-Kx,zeros(N,1)); %u0=u;
 
 %% RBF
 phi = 'phs';
-W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep);
 
+% p = 1;
+m = p + 1; %number of polynomial terms;
+n = 2*m;
+if mod(n,2)
+    n = n
+else
+    n = n + 1
+end
+%stencil size
+
+parallel = 1;
+W = BSweights1Drbffd_phs(r,sig,x,N,n,m,indin,phi,ep,parallel);
 %% Integration
 I=speye(N);
 

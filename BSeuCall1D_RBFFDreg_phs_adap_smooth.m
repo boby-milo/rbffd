@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs_adap_smooth(Nx,n,ep,M,Kmul)
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs_adap_smooth(Nx,p,ep,M,Kmul)
 %% 1D European Call RBF-FD
 % 2016-02-06
 
@@ -17,7 +17,7 @@ i=1:Nx;
 Ki=Kx;
 S=Kmul*Ki;
 
-g=5; %tune this! 1,2,3,4,5
+g=15; %tune this! 1,2,3,4,5
 c=2*Ki/g;
 
 dxi=(1/Nx)*(asinh((S-Ki)/c)-asinh(-Ki/c));
@@ -59,7 +59,19 @@ u(indreg)=uind;
 
 %% RBF
 phi = 'phs';
-W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep);
+
+% p = 1;
+m = p + 1; %number of polynomial terms;
+n = 2*m;
+if mod(n,2)
+    n = n
+else
+    n = n + 1
+end
+%stencil size
+
+parallel = 1;
+W = BSweights1Drbffd_phs(r,sig,x,N,n,m,indin,phi,ep,parallel);
 
 %% Integration
 I=speye(N);

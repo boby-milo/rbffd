@@ -6,14 +6,14 @@ if nargin == 8
     parallel = 0;
 end
 
-if parallel
-    p = gcp();
-    argfor = p.NumWorkers;
-else
-    p = gcp('nocreate');
-    delete(p);
-    argfor = 0;
-end
+% if parallel
+%     p = gcp();
+%     argfor = p.NumWorkers;
+% else
+%     p = gcp('nocreate');
+% %     delete(p);
+%     argfor = 0;
+% end
 
 l=round((n-1)/2); %stencil distance;
 
@@ -71,6 +71,7 @@ Ax=RBFmat(phi,ep,Rc,'1',1);
 Axx=RBFmat(phi,ep,Rc,'2',1);
 
 P = vander(x(indc));
+P = fliplr(P);
 P = P (:,1:m);
 
 

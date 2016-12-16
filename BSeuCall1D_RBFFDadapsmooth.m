@@ -18,7 +18,7 @@ i=1:Nx;
 Ki=Kx;
 S=Kmul*Ki;
 
-g=5; %tune this! 1,2,3,4,5
+g=15; %tune this! 1,2,3,4,5
 c=2*Ki/g;
 
 dxi=(1/Nx)*(asinh((S-Ki)/c)-asinh(-Ki/c));

@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = Poisson1D_RBFFDreg_phs(N,p)
+function [u,err,tim,x,dx,N,W] = Poisson1D_RBFFDreg_gs(N,n,p,ep)
 %% 1D European Call RBF-FD
 % 2016-02-06
 
@@ -19,18 +19,18 @@ uend = sin(10*x(end)); %boundary
 b = f; b(1) = u0; b(end) = uend;
 
 %% RBF
-phi = 'phs';
-d = 3; %phs degree
+phi = 'gs';
+% ep = 1; %shape parameter
 
 % p = 1;
 m = p + 1; %number of polynomial terms;
 
-n = 2 * m;
-if mod(n, 2)
-    n
-else
-    n = n + 1
-end
+% n = 2 * m;
+% if mod(n, 2)
+%     n
+% else
+%     n = n + 1
+% end
 %stencil size
 
 l = round((n-1)/2); %stencil distance
@@ -53,7 +53,7 @@ for ii=2:l
 %     pause(0.01)
 %     clf
     
-    wc = RBFelements(x,xc,n,m,indc,phi,d,jjc);
+    wc = RBFelements(x,xc,n,m,indc,phi,ep,jjc);
     Wval(:,ii-1)=wc;
     jind(:,ii-1)=indc';
 end
@@ -73,7 +73,7 @@ for ii=(l+1):(N-l)
 %     pause(0.01)
 %     clf
     
-    wc = RBFelements(x,xc,n,m,indc,phi,d,jjc);
+    wc = RBFelements(x,xc,n,m,indc,phi,ep,jjc);
     Wval(:,ii-1)=wc;
     jind(:,ii-1)=indc';
 end
@@ -92,7 +92,7 @@ for ii=(N-l+1):(N-1)
 %     pause(0.01)
 %     clf
     
-    wc = RBFelements(x,xc,n,m,indc,phi,d,jjc);
+    wc = RBFelements(x,xc,n,m,indc,phi,ep,jjc);
     Wval(:,ii-1)=wc;
     jind(:,ii-1)=indc';
 end
@@ -113,17 +113,17 @@ err = uexact - u;
 end
 
 
-function wc = RBFelements(x,xc,n,m,indc,phi,d,jjc)
+function wc = RBFelements(x,xc,n,m,indc,phi,ep,jjc)
 
 Rc=xcdist(x(indc),x(indc),1);
 
 %     H=Rc(:,:,1);
 %     hmin=min(min(H(H>0)));
-%     d=gamma/hmin;
+%     ep=gamma/hmin;
 
-A = RBFmat(phi,d,Rc,'0',1);
-% Ax=RBFmat(phi,d,Rc,'1',1);
-Axx = RBFmat(phi,d,Rc,'2',1);
+A = RBFmat(phi,ep,Rc,'0',1);
+% Ax=RBFmat(phi,ep,Rc,'1',1);
+Axx = RBFmat(phi,ep,Rc,'2',1);
 
 P = vander(x(indc));
 P = fliplr(P);

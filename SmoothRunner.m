@@ -7,9 +7,9 @@ dbstop if error
 Kmul = 4;
 M = 1000; 
 
-runnumber=1;
+runnumber=2;
 
-N = Kmul*[25, 50, 75, 100, 125, 150, 175, 200, 250, 300, 400, 500];
+N = [25, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600];
 
 Kx = 1;
 
@@ -26,23 +26,17 @@ for ii = 1:numel(N)
     
     
     
-    k = 5;
-    
-    n = 19; 
+    d = 3;
+    p = 3; 
 %     F4 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
-    F4 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,k,M,Kmul);
+    F4 = parfeval(@BSeuCall1D_RBFFDreg_phs_smooth,7,N(ii),p,d,M,Kmul);
     
-%     n = 7;
 %     F5 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
-    F5 = parfeval(@BSeuCall1D_RBFFDreg_phs_smooth,7,N(ii),n,k,M,Kmul);
+    F5 = parfeval(@BSeuCall1D_RBFFDreg_phs_adap_smooth,7,N(ii),p,d,M,Kmul);
     
-%     n = 9;
+    p = 5; 
 %     F6 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
-    F6 = parfeval(@BSeuCall1D_RBFFDreg_phs_adap_smooth,7,N(ii),n,k,M,Kmul);
-    
-    
-    
-    
+    F6 = parfeval(@BSeuCall1D_RBFFDreg_phs_adap_smooth,7,N(ii),p,d,M,Kmul);
     
     [uF0{ii},errF0{ii},timF0,xF0{ii},dxF0(ii),~,~] = fetchOutputs(F0);
     disp([int2str(ii),' F0 ', num2str(timF0)])
