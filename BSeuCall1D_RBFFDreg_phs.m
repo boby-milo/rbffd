@@ -1,17 +1,17 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs(N,n,ep,M,Kmul)
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs(N,p,ep,M,Kmul)
 %% 1D European Call RBF-FD
 % 2016-02-06
 
 tic
 %% Parameters
-K=100;
-Kx=1; %strike
+K=100; %strike
+Kx=1/Kmul; 
 T=1; %maturation
 r=0.03; %interest
 sig=0.15; %volatility
 
 %% Grid
-x=transpose(linspace(0,Kmul,N));
+x=transpose(linspace(0,1,N));
 dx=x(2)-x(1);
 
 indin=2:N-1;
@@ -24,10 +24,19 @@ u=max(x-Kx,zeros(N,1)); %u0=u;
 
 %% RBF
 phi = 'phs';
-m = floor(n/4) %number of polynomial terms;
+
+% p = 1;
+m = p + 1; %number of polynomial terms;
+n = 2*m;
+if mod(n,2)
+    n = n
+else
+    n = n + 1
+end
+%stencil size
 
 parallel = 1;
-W = BSweights1Drbffd_phs(r,sig,x,N,n,indin,phi,ep,m,parallel);
+W = BSweights1Drbffd_phs_debug(r,sig,x,N,n,m,indin,phi,ep,parallel);
 
 %% Integration
 I=speye(N);
@@ -74,8 +83,8 @@ tim=toc;
 % u=u(indreg);
 
 % K=100;
-x=K*x;
-u=K*u; %u0=K*u0;
+x=K*Kmul*x;
+u=K*Kmul*u; %u0=K*u0;
 
 ua=rsol(sig, r, K, T, x);
 

@@ -1,4 +1,4 @@
-function W = BSweights1Drbffd_phs(r,sig,x,N,n,m,indin,phi,ep,parallel)
+function W = BSweights1Drbffd_phs_debug(r,sig,x,N,n,m,indin,phi,ep,parallel)
 % Constructs a BS differentiation matrix W from 1D grid x,
 %stencil size n.
 
@@ -27,6 +27,16 @@ for ii=2:l
     indc=1:n;
     a=ii;
     
+    figure(1)
+    plot(x,zeros(size(x)),'k.');
+    hold on
+    plot(xc,zeros(size(xc)),'rx');
+    plot(x(indc),zeros(size(x(indc))),'go');
+    drawnow;
+    pause(0.01)
+    clf
+    
+    
     wc = RBFelements(x,xc,n,m,indc,phi,ep,r,sig,a);
     Wval(:,ii-1)=wc;
     jind(:,ii-1)=indc';
@@ -38,6 +48,15 @@ for ii=(l+1):(N-l)
     indc=ii-l:ii+l;
     a=l+1;
     
+    figure(1)
+    plot(x,zeros(size(x)),'k.');
+    hold on
+    plot(xc,zeros(size(xc)),'rx');
+    plot(x(indc),zeros(size(x(indc))),'go');
+    drawnow;
+    pause(0.01)
+    clf
+    
     wc = RBFelements(x,xc,n,m,indc,phi,ep,r,sig,a);
     Wval(:,ii-1)=wc;
     jind(:,ii-1)=indc';
@@ -47,6 +66,15 @@ for ii=(N-l+1):(N-1)
     xc=x(ii);
     indc=N-n+1:N;
     a=ii-N+n;
+    
+    figure(1)
+    plot(x,zeros(size(x)),'k.');
+    hold on
+    plot(xc,zeros(size(xc)),'rx');
+    plot(x(indc),zeros(size(x(indc))),'go');
+    drawnow;
+    pause(0.01)
+    clf
     
     wc = RBFelements(x,xc,n,m,indc,phi,ep,r,sig,a);
     Wval(:,ii-1)=wc;
