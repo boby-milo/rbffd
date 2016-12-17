@@ -1,4 +1,4 @@
-function [grid] = make_grid(grid)
+function [grid] = pricing_grid(grid)
 %Creates a computational grid.
 %Inputs: grid
 %   grid.dim: 1, 2, 3;
@@ -27,40 +27,40 @@ switch grid.dim
                 grid.h = grid.x(2)-grid.x(1);
                 return;
         end
-        
-        
-        
+
+
+
     case 2
         switch grid.type
             case 'uniform'
                 x = linspace(0,grid.xmax,grid.N);
                 y = linspace(0,grid.xmax,grid.N);
-                
+
                 [X,Y] = meshgrid(x,y);
                 xvec = X(:);
                 yvec = Y(:);
-                
+
                 grid.ind = transpose(1:numel(xvec));
-                
+
 %                 indle = [1:grid.N];
 %                 inddo = [1:grid.N:grid.N^2-grid.N+1];
                 indup = grid.N:grid.N:grid.N^2;
                 indri = grid.N^2-grid.N+1:1:grid.N^2;
-                
+
                 grid.indcf = 1;
                 grid.indff = transpose([indup(1:end-1),indri]);
-                
-                grid.indin = grid.ind; 
+
+                grid.indin = grid.ind;
                 grid.indin([grid.indff; grid.indcf]) = [];
-                
+
                 grid.Ntot = numel(xvec);
                 grid.x = [xvec,yvec];
                 grid.h = [grid.x(1+grid.N,1) - grid.x(1,1), grid.x(2,2) - grid.x(1,2)];
                 return;
         end
-        
-        
-        
+
+
+
     case 3
         disp('Not implemented.');
         return;

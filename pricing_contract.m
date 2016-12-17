@@ -1,11 +1,11 @@
-function [u] = payoff_function(contract,grid, smoothing)
+function [u] = pricing_contract(contract,grid, smoothing)
 %Sets the terminal condition on the grid. This works for n-dimensional
 %basket options.
 %Inputs: contract, grid
 %   contract.payoff: 'EUcall'
 %   contract.K: strike
 %   contract.T: maturity
-%   x: node coordinates returned by make_grid;
+%   x: node coordinates returned by pricing_grid;
 %Outputs:
 %   u: values of payoff at node coordinates x;
 
@@ -16,14 +16,14 @@ end
 switch contract.payoff
     case {'EUcall', 'AMcall'}
         f = @(x) max(x - contract.K,0);
-        
+
     case {'EUput', 'AMput'}
         f = @(x) max(contract.K - x,0);
-        
+
     case {'EUcallBasket', 'AMcallBasket'}
         u = max((1/grid.dim)*sum(grid.x,2) - contract.K, 0);
         return;
-        
+
     case {'EUputBasket', 'AMputBasket'}
         u = max(contract.K - (1/grid.dim)*sum(grid.x,2), 0);
         return;
@@ -43,7 +43,7 @@ if smoothing
         disp('Higher-dimensional smoothing is not implemented.')
         return;
     end
-    
+
 else
     u = f(grid.x);
     return;

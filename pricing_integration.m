@@ -1,4 +1,4 @@
-function [u,method] = time_integrate(contract,parameter,method,grid)
+function [u,method] = pricing_integration(contract,parameter,method,grid)
 %Integrates the equation in time.
 %Inputs:
 %   method.time.type: 'BDF';
@@ -17,33 +17,33 @@ switch method.time.type
         I = speye(grid.N);
         A = I - grid.W*dt;
         u1 = grid.u0;
-        
+
         switch method.time.order
             case 1
                 rcm = symrcm(A);
                 A = A(rcm,rcm);
                 [L,U] = lu(A);
-                
+
                 for ii = 2 : method.time.M
-                    
+
                     b = u1;
                     b(end) = grid.x(end) - contract.K*exp(-parameter.r*(ii-1)*dt);
-                    
+
                     u(rcm) = L\b(rcm);
                     u(rcm) = U\u(rcm);
-                    
+
                     u1 = u;
                     %u = max(u,0);
                 end
                 return;
-                
+
             case 2
                 b = u1;
                 b(end) = grid.x(end) - contract.K*exp(-parameter.r*dt);
-                
+
                 u = A\b;
                 %u = max(u,0);
-                
+
                 %BDF-2
                 A = I - (2/3)*dt*grid.W;
                 rcm = symrcm(A);
@@ -52,10 +52,10 @@ switch method.time.type
                 for ii = 3 : method.time.M
                     u2 = u1;
                     u1 = u;
-                    
+
                     b = (4/3)*u1 - (1/3)*u2;
                     b(end) = grid.x(end) - contract.K*exp(-parameter.r*(ii-1)*dt);
-                    
+
                     u(rcm) = L\b(rcm);
                     u(rcm) = U\u(rcm);
                     %u=max(u,0);
@@ -65,4 +65,3 @@ switch method.time.type
 end
 
 end
-

@@ -1,4 +1,4 @@
-function [util] = smooth4adap(s,u)
+function [util] = pricing_grid_smooth4(s,u)
 %Performs 4th order smoothing od the initial data.
 %   s - grid points
 %   u - initial condition function handle

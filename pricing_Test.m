@@ -4,47 +4,47 @@ close all
 
 dbstop if error
 
-%% Test default_init
+%% Test pricing_init
 clear
 close all
-[~,~,~,~] = default_init();
+[~,~,~,~] = pricing_init();
 
-disp('default_init: Passed!')
+disp('pricing_init: Passed!')
 
-%% Test make_grid
+%% Test pricing_grid
 clear
 close all
 
 % 1D uniform
-[contract,parameter,method,grid] = default_init();
-grid = make_grid(grid);
+[contract,parameter,method,grid] = pricing_init();
+grid = pricing_grid(grid);
 
 % 2D uniform
-[contract,parameter,method,grid] = default_init();
+[contract,parameter,method,grid] = pricing_init();
 grid.dim = 2;
-grid = make_grid(grid);
+grid = pricing_grid(grid);
 
 
-%% Test payoff_function
+%% Test pricing_contract
 clear
 close all
 
-[contract,~,~,grid] = default_init();
-grid = make_grid(grid);
+[contract,~,~,grid] = pricing_init();
+grid = pricing_grid(grid);
 
 % 1D
 smoothing = 0;
-[cnatural] = payoff_function(contract,grid, smoothing);
+[cnatural] = pricing_contract(contract,grid, smoothing);
 
 smoothing = 1;
-[csmooth] = payoff_function(contract,grid, smoothing);
+[csmooth] = pricing_contract(contract,grid, smoothing);
 
 contract.payoff = 'EUput';
 smoothing = 0;
-[pnatural] = payoff_function(contract,grid, smoothing);
+[pnatural] = pricing_contract(contract,grid, smoothing);
 
 smoothing = 1;
-[psmooth] = payoff_function(contract,grid, smoothing);
+[psmooth] = pricing_contract(contract,grid, smoothing);
 
 figure(1)
 plot(grid.x,cnatural, grid.x, csmooth, grid.x, pnatural, grid.x, psmooth);
@@ -52,19 +52,19 @@ plot(grid.x,cnatural, grid.x, csmooth, grid.x, pnatural, grid.x, psmooth);
 figure(2)
 plot(grid.x,cnatural - csmooth, grid.x, pnatural - psmooth);
 
-disp('payoff_function: Passed!')
+disp('pricing_contract: Passed!')
 
 %% Test EUcall
 clear
 close all
 %#% Setup
-[contract,parameter,method,grid] = default_init();
+[contract,parameter,method,grid] = pricing_init();
 
 %#% Evaluation
-grid = make_grid(grid);
-grid.u0 = payoff_function(contract,grid);
-grid.W = differentiation_matrix(method,parameter,grid);
-[grid.u, ~] = time_integrate(contract,parameter,method,grid);
+grid = pricing_grid(grid);
+grid.u0 = pricing_contract(contract,grid);
+grid.W = pricing_differentiation(method,parameter,grid);
+[grid.u, ~] = pricing_integration(contract,parameter,method,grid);
 
 figure()
 plot(grid.x,grid.u0,grid.x,grid.u)
@@ -75,7 +75,7 @@ disp('EUcall: passed!')
 clear
 close all
 %#% Setup
-[contract,parameter,method,grid] = default_init();
+[contract,parameter,method,grid] = pricing_init();
 contract.payoff = 'EUcallBasket';
 
 parameter.sig = [0.3, 0.3];
@@ -85,10 +85,10 @@ grid.dim = 2;
 grid.smax = 8*contract.K;
 
 %#% Evaluation
-grid = make_grid(grid);
-grid.u0 = payoff_function(contract,grid);
-grid.W = differentiation_matrix(method,parameter,grid);
-% [s.u,m] = time_integrate(c,p,m,s);
+grid = pricing_grid(grid);
+grid.u0 = pricing_contract(contract,grid);
+grid.W = pricing_differentiation(method,parameter,grid);
+% [s.u,m] = pricing_integration(c,p,m,s);
 disp('EUcallBasket: passed!')
 
 figure()

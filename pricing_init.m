@@ -1,4 +1,4 @@
-function [contract,parameter,method,grid] = default_init()
+function [contract,parameter,method,grid] = pricing_init()
 %Constructor that initiates default problem setup
 %   contract: contract
 %   parameter: parameter
@@ -27,4 +27,3 @@ grid.dim = 1;
 grid.N = 101;
 grid.xmax = 4*contract.K;
 end
-
