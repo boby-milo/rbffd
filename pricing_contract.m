@@ -35,7 +35,7 @@ if smoothing
         a = 1/10;
         indreg = find((grid.x >= (1-a)*contract.K) & (grid.x <= (1+a)*contract.K));
         xind = grid.x(indreg);
-        uind = smooth4(xind,f);
+        uind = pricing_grid_smooth4(xind,f);
         u = f(grid.x);
         u(indreg)=uind;
         return;
