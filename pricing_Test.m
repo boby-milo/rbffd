@@ -6,28 +6,49 @@ dbstop if error
 
 %% Test pricing_init
 clear
-close all
+% close all
 [~,~,~,~] = pricing_init();
 
 disp('pricing_init: Passed!')
 
 %% Test pricing_grid
 clear
-close all
+% close all
 
 % 1D uniform
-[contract,parameter,method,grid] = pricing_init();
+[~,~,~,grid] = pricing_init();
 grid = pricing_grid(grid);
 
+figure()
+plot(grid.x(grid.indff),zeros(size(grid.x(grid.indff))),'b^','MarkerFaceColor','auto')
+hold on
+plot(grid.x(grid.indcf),zeros(size(grid.x(grid.indcf))),'rsq','MarkerFaceColor','auto')
+plot(grid.x(grid.indin),zeros(size(grid.x(grid.indin))),'ko','MarkerFaceColor','auto')
+plot(grid.x,zeros(size(grid.x)),'k.')
+axis tight
+hold off
+
 % 2D uniform
-[contract,parameter,method,grid] = pricing_init();
+[~,~,~,grid] = pricing_init();
 grid.dim = 2;
 grid = pricing_grid(grid);
 
+figure()
+clf
+plot(grid.x(grid.indff,1),grid.x(grid.indff,2),'b^','MarkerFaceColor','auto')
+hold on
+plot(grid.x(grid.indcf,1),grid.x(grid.indcf,2),'rsq','MarkerFaceColor','auto')
+plot(grid.x(grid.indin,1),grid.x(grid.indin,2),'ko','MarkerFaceColor','auto')
+plot(grid.x(:,1),grid.x(:,2),'k.')
+axis equal
+axis tight
+hold off
+
+disp('pricing_grid: Passed!')
 
 %% Test pricing_contract
 clear
-close all
+% close all
 
 [contract,~,~,grid] = pricing_init();
 grid = pricing_grid(grid);
@@ -46,17 +67,17 @@ smoothing = 0;
 smoothing = 1;
 [psmooth] = pricing_contract(contract,grid, smoothing);
 
-figure(1)
+figure()
 plot(grid.x,cnatural, grid.x, csmooth, grid.x, pnatural, grid.x, psmooth);
 
-figure(2)
+figure()
 plot(grid.x,cnatural - csmooth, grid.x, pnatural - psmooth);
 
 disp('pricing_contract: Passed!')
 
 %% Test EUcall
 clear
-close all
+% close all
 %#% Setup
 [contract,parameter,method,grid] = pricing_init();
 
@@ -73,7 +94,7 @@ disp('EUcall: passed!')
 
 %% Test EUbasket
 clear
-close all
+% close all
 %#% Setup
 [contract,parameter,method,grid] = pricing_init();
 contract.payoff = 'EUcallBasket';
@@ -90,17 +111,6 @@ grid.u0 = pricing_contract(contract,grid);
 grid.W = pricing_differentiation(method,parameter,grid);
 % [s.u,m] = pricing_integration(c,p,m,s);
 disp('EUcallBasket: passed!')
-
-figure()
-clf
-plot(grid.x(grid.indff,1),grid.x(grid.indff,2),'b^','MarkerFaceColor','auto')
-hold on
-plot(grid.x(grid.indcf,1),grid.x(grid.indcf,2),'rsq','MarkerFaceColor','auto')
-plot(grid.x(grid.indin,1),grid.x(grid.indin,2),'ko','MarkerFaceColor','auto')
-plot(grid.x(:,1),grid.x(:,2),'k.')
-axis equal
-axis tight
-hold off
 
 figure()
 tri = delaunay(grid.x(:,1),grid.x(:,2));
