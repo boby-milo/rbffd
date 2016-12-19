@@ -4,7 +4,7 @@ function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs_smooth(N,p,ep,M,Kmul)
 
 tic
 %% Parameters
-K=100;
+K=1;
 Kx=1; %strike
 T=1; %maturation
 r=0.03; %interest
@@ -99,7 +99,7 @@ tim=toc;
 % x=x(indreg);
 % u=u(indreg);
 
-% K=100;
+% K=1;
 x=K*x;
 u=K*u; %u0=K*u0;
 

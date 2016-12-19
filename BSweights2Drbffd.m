@@ -2,6 +2,10 @@ function W = BSweights2Drbffd(r,sig1,sig2,rho,s,N,n,indin,phi,ep,adap)
 % Constructs a BS differentiation matrix W from 2D grid s,
 %stencil size n and indices indin.
 
+if nargin == 10
+    adap = 0;
+end
+
 % Weights
 indc=findKNearestNeighbors(s,s,n);
 

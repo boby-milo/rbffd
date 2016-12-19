@@ -7,7 +7,7 @@ dbstop if error
 Kmul = 4;
 M = 1000; 
 
-runnumber=2;
+runnumber=3;
 
 N = [25, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600];
 
@@ -26,15 +26,15 @@ for ii = 1:numel(N)
     
     
     
-    d = 3;
-    p = 3; 
+    d = 5;
+    p = 5; 
 %     F4 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
     F4 = parfeval(@BSeuCall1D_RBFFDreg_phs_smooth,7,N(ii),p,d,M,Kmul);
     
 %     F5 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
     F5 = parfeval(@BSeuCall1D_RBFFDreg_phs_adap_smooth,7,N(ii),p,d,M,Kmul);
     
-    p = 5; 
+    p = 7; 
 %     F6 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
     F6 = parfeval(@BSeuCall1D_RBFFDreg_phs_adap_smooth,7,N(ii),p,d,M,Kmul);
     

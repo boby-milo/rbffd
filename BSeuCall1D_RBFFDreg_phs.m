@@ -4,8 +4,8 @@ function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs(N,p,ep,M,Kmul)
 
 tic
 %% Parameters
-K=100; %strike
-Kx=1/Kmul; 
+K=1; %strike
+Kx=1/Kmul;
 T=1; %maturation
 r=0.03; %interest
 sig=0.15; %volatility
@@ -78,11 +78,11 @@ tim=toc;
 %         indreg=[indreg ii];
 %     end
 % end
-% 
+%
 % x=x(indreg);
 % u=u(indreg);
 
-% K=100;
+% K=1;
 x=K*Kmul*x;
 u=K*Kmul*u; %u0=K*u0;
 

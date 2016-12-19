@@ -218,7 +218,7 @@ tim=toc;
 % x=x(indreg);
 % u=u(indreg);
 
-% % K=100;
+% % K=1;
 % x=K*x;
 % u=K*u; %u0=K*u0;
 
