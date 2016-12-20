@@ -34,7 +34,7 @@ indreg=[];
 
     xind = x(indreg);
 
-uind = smooth4adap(xind,fu);
+uind = smooth4(xind,fu);
 
 u = fu(x);
 u(indreg)=uind;

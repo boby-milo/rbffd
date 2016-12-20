@@ -24,10 +24,12 @@ for ii = 1:numel(N)
     d = 5;
     p = 5;
     F1 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M,Kmul);
+    F3 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M,Kmul);
     
     d = 7;
     p = 7;
     F2 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M,Kmul);
+    F4 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M,Kmul);
     
     
     
@@ -49,14 +51,28 @@ for ii = 1:numel(N)
     erF2(ii) = norm(errF2{ii},Inf);
     disp(erF2(ii));
     
-    f=figure(runnumber)
+    [uF3{ii},errF3{ii},timF3,xF3{ii},dxF3(ii),nF3(ii),NtotF3(ii),~] = fetchOutputs(F3);
+    disp([int2str(ii),' F3 ', num2str(timF3)])
+    disp([NtotF3(ii),d,p]);
+    erF3(ii) = norm(errF3{ii},Inf);
+    disp(erF3(ii));
+    
+    [uF4{ii},errF4{ii},timF4,xF4{ii},dxF4(ii),nF4(ii),NtotF4(ii),~] = fetchOutputs(F4);
+    disp([int2str(ii),' F4 ', num2str(timF4)])
+    disp([NtotF4(ii),d,p]);
+    erF4(ii) = norm(errF4{ii},Inf);
+    disp(erF4(ii));
+    
+    f=figure(runnumber);
     clf
     loglog(dxF0,erF0,'-*')
     hold on
     loglog(dxF1,erF1,'-*')
     loglog(dxF2,erF2,'-*')
+    loglog(dxF3,erF3,'-*')
+    loglog(dxF4,erF4,'-*')
     title('BSeuCall2Dbasket')
-    legend('FD2\_reg\_square','PHSd5p5\_reg\_triangle', 'PHSd7p7\_reg\_triangle')
+    legend('FD2\_reg\_square','PHSd5p5\_reg\_triangle', 'PHSd7p7\_reg\_triangle','PHSd5p5\_reg\_triangle\_smooth', 'PHSd7p7\_reg\_triangle\_smooth')
     xlabel('h')
     ylabel('\Deltau_{max}')
     drawnow
