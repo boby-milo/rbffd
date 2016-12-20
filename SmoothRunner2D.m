@@ -1,18 +1,25 @@
-clc
+% clc
 clear
 % close all
 
+warning off
 dbstop if error
+pctRunOnAll warning off
 
 Kmul = 8;
+M = 100; 
 
-M = 1000; 
+runnumber = 1;
 
-runnumber=1;
+N = [10, 20, 40, 80, 160];
+d = 7;
+p = 7;
 
-N = 1000;
+[u,err,tim,x,dx,n,Ntot,W] = BSeuCall2Dbasket_RBFFDreg_phs(N,p,d,M,Kmul);
 
-[u,err,tim,x,dx,Ntot,W] = BSeuCall2Dbasket_RBFFDreg_phs(N,1,3,M,Kmul);
+disp([N,d,p]);
+disp(norm(err,Inf));
+disp(tim);
 
 xvec = x(:,1); yvec = x(:,2);
 

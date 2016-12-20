@@ -9,14 +9,14 @@ elseif nargin == 11
     parallel = 0;
 end
 
-% if parallel
-%     p = gcp();
-%     argfor = p.NumWorkers;
-% else
-%     p = gcp('nocreate');
-% %     delete(p);
-%     argfor = 0;
-% end
+if parallel
+    ppar = gcp();
+    argfor = ppar.NumWorkers;
+else
+    ppar = gcp('nocreate');
+%     delete(p);
+    argfor = 0;
+end
 
 % Weights
 indc = findKNearestNeighbors(s,s,n);
@@ -25,23 +25,23 @@ iind = repmat(indin,n,1); iind = iind(:); %n*N
 jind = transpose(indc(indin,:)); jind = jind(:);%n*N
 Wval = zeros(n,numel(indin));  %n*N
 
-% parfor (ii = indin, argfor)
-for ii = indin
+parfor (ii = indin, argfor)
+% for ii = indin
     sc = s(ii,:); xc = sc(:,1); yc = sc(:,2);
     se = s(indc(ii,:),:);
     
     Rc = xcdist(se,se,1);
     
-    if adap == 'min'
-        H = Rc(:,:,1);
-        hmin = min(H(H>0));
-        ep = gamma/hmin;
-        
-    elseif adap == 'avg'
-        H = Rc(:,:,1);
-        havg = mean(H(H>0));
-        ep = gamma/havg;
-    end
+%     if strcmp(adap,'min')
+%         H = Rc(:,:,1);
+%         hmin = min(H(H>0));
+% %         ep = gamma/hmin;
+%         
+%     elseif strcmp(adap,'avg')
+%         H = Rc(:,:,1);
+%         havg = mean(H(H>0));
+% %         ep = gamma/havg;
+%     end
     
     A = RBFmat(phi,ep,Rc,'0',1);
     
