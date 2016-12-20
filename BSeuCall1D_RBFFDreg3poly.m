@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg(N,n,ep,M)
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg3poly(N,n,ep,M,parallel)
 %% 1D European Call RBF-FD
 % 2016-02-06
 
@@ -24,7 +24,8 @@ u=max(x-Kx,zeros(N,1)); %u0=u;
 
 %% RBF
 phi = 'gs';
-W = BSweights1Drbffd(r,sig,x,N,n,indin,phi,ep);
+% parallel = 0;
+W = BSweights1Drbffd3poly(r,sig,x,N,n,indin,phi,ep,parallel);
 
 %% Integration
 I=speye(N);
@@ -48,10 +49,10 @@ A=A(rcm,rcm);
 for ii=3:M
     u2=u1;
     u1=u;
-
+    
     b=((4/3)*u1-(1/3)*u2);
     b(end)=x(end)-Kx*exp(-r*(ii-1)*dt);
-
+    
     u(rcm)=L1\b(rcm);
     u(rcm)=U1\u(rcm);
     u=max(u,0);

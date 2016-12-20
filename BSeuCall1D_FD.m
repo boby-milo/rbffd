@@ -38,7 +38,7 @@ bb = -sig^2*x.^2/dx^2 -r;
 cc = 0.5*sig^2*x.^2/dx^2 +0.5*r*x/dx;
 
 W = gallery('tridiag',aa(2:end),bb,cc(1:end-1));
-W(:,1)=zeros(1,N); %W(1,1)=1;
+W(1,:)=zeros(1,N); %W(1,1)=1;
 W(end,:)=zeros(1,N); %W(end,end)=1;
 
 %% Integration
@@ -74,16 +74,16 @@ end
 tim=toc;
 
 %% Error
-indreg=[];
-for ii=1:length(x)
-    %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
-    if x(ii)>=1/3*K && x(ii)<=5/3*K
-        indreg=[indreg ii];
-    end
-end
-
-x=x(indreg);
-u=u(indreg);
+% indreg=[];
+% for ii=1:length(x)
+%     %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
+%     if x(ii)>=1/3*K && x(ii)<=5/3*K
+%         indreg=[indreg ii];
+%     end
+% end
+% 
+% x=x(indreg);
+% u=u(indreg);
 
 ua=rsol(sig, r, K, T, x);
 
