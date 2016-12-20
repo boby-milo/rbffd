@@ -25,12 +25,15 @@ for ii = 1:numel(N)
     p = 5;
     F1 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M,Kmul);
     F3 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M,Kmul);
+    F5 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs,8,N(ii),p,d,M,Kmul);
+%     F7 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs_smooth,8,N(ii),p,d,M,Kmul);
     
     d = 7;
     p = 7;
     F2 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M,Kmul);
     F4 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M,Kmul);
-    
+    F6 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs,8,N(ii),p,d,M,Kmul);
+%     F8 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs_smooth,8,N(ii),p,d,M,Kmul);
     
     
     [uF0{ii},errF0{ii},timF0,xF0{ii},dxF0(ii),NtotF0(ii),~] = fetchOutputs(F0);
@@ -63,16 +66,53 @@ for ii = 1:numel(N)
     erF4(ii) = norm(errF4{ii},Inf);
     disp(erF4(ii));
     
+    [uF5{ii},errF5{ii},timF5,xF5{ii},dxF5(ii),nF5(ii),NtotF5(ii),~] = fetchOutputs(F5);
+    disp([int2str(ii),' F5 ', num2str(timF5)])
+    disp([NtotF5(ii),d,p]);
+    erF5(ii) = norm(errF5{ii},Inf);
+    disp(erF5(ii));
+    
+    [uF6{ii},errF6{ii},timF6,xF6{ii},dxF6(ii),nF6(ii),NtotF6(ii),~] = fetchOutputs(F6);
+    disp([int2str(ii),' F6 ', num2str(timF6)])
+    disp([NtotF6(ii),d,p]);
+    erF6(ii) = norm(errF6{ii},Inf);
+    disp(erF6(ii));
+    
+%     [uF7{ii},errF7{ii},timF7,xF7{ii},dxF7(ii),nF7(ii),NtotF7(ii),~] = fetchOutputs(F7);
+%     disp([int2str(ii),' F7 ', num2str(timF7)])
+%     disp([NtotF7(ii),d,p]);
+%     erF7(ii) = norm(errF7{ii},Inf);
+%     disp(erF7(ii));
+%     
+%     [uF8{ii},errF8{ii},timF8,xF8{ii},dxF8(ii),nF8(ii),NtotF8(ii),~] = fetchOutputs(F8);
+%     disp([int2str(ii),' F8 ', num2str(timF8)])
+%     disp([NtotF8(ii),d,p]);
+%     erF8(ii) = norm(errF8{ii},Inf);
+%     disp(erF8(ii));
+    
     f=figure(runnumber);
     clf
-    loglog(dxF0,erF0,'-*')
+    loglog(dxF0,erF0,'-sq')
     hold on
-    loglog(dxF1,erF1,'-*')
-    loglog(dxF2,erF2,'-*')
-    loglog(dxF3,erF3,'-*')
-    loglog(dxF4,erF4,'-*')
+    loglog(dxF1,erF1,'-^')
+    loglog(dxF2,erF2,'-^')
+    loglog(dxF3,erF3,'-o')
+    loglog(dxF4,erF4,'-o')
+    loglog(dxF5,erF5,'-*')
+    loglog(dxF6,erF6,'-*')
+%     loglog(dxF7,erF7,'-')
+%     loglog(dxF8,erF8,'-')
+
     title('BSeuCall2Dbasket')
-    legend('FD2\_reg\_square','PHSd5p5\_reg\_triangle', 'PHSd7p7\_reg\_triangle','PHSd5p5\_reg\_triangle\_smooth', 'PHSd7p7\_reg\_triangle\_smooth')
+    legend('FD2\_reg\_square',... %F0
+        'PHSd5p5\_reg\_triangle',... %F1
+        'PHSd7p7\_reg\_triangle',... %F2
+        'PHSd5p5\_reg\_triangle\_smooth',... %F3
+        'PHSd7p7\_reg\_triangle\_smooth',... %F4
+        'PHSd7p7\_adap\_triangle',... %F5
+        'PHSd5p5\_adap\_triangle') %F6
+%         'PHSd7p7\_adap\_triangle\_smooth',... %F7
+%         'PHSd5p5\_adap\_triangle\_smooth') %F8
     xlabel('h')
     ylabel('\Deltau_{max}')
     drawnow

@@ -44,13 +44,25 @@ dt=T/(M-1);
 t=T:-dt:0;
 
 %% Initial condition
-fu = @(s1, s2) max((1/2)*(s1+s2)-Kx, 0);
-
-u0 = fu(xvec', yvec');
-u = smooth4([xvec', yvec'],fu,2);
-
 % u0=max((1/2)*(xvec+yvec)-Kx,zeros(1,length(xvec)));
 % u=u0';
+
+fu = @(s1, s2) max((1/2)*(s1+s2)-Kx, 0);
+
+indreg = [];
+for ii = 1:length(xvec)
+    %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
+    if abs(xvec(ii)+yvec(ii)-2*Kx)/sqrt(2) <= 5*dx
+        indreg = [indreg ii];
+    end
+end
+xvecind = xvec(indreg);
+yvecind = yvec(indreg);
+uind = smooth4([xvecind', yvecind'],fu,2);
+
+u = fu(xvec', yvec');
+u(indreg) = uind;
+
 
 % figure(1)
 % clf

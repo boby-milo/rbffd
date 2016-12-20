@@ -13,14 +13,14 @@ rho=0.5; %rho=[1 0.5; 0.5 1];
 T=1;
 K=1;
 %% Grid
-Kx=1;
+Kx=1/Kmul;
 
 % Nx=100;
 i=1:Nx;
 Ki=2*Kx;
-S=4*Ki;
+S=1;
 
-g=3; %tune this! 1,2,3,4,5
+g=5; %tune this! 1,2,3,4,5
 
 c=2*Ki/g;
 
@@ -57,8 +57,19 @@ t=T:-dt:0;
 %% Initial condition
 fu = @(s1, s2) max((1/2)*(s1+s2)-Kx, 0);
 
-u0 = fu(xvec', yvec');
-u = smooth4([xvec', yvec'],fu,2);
+indreg = [];
+for ii = 1:length(xvec)
+    %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
+    if abs(xvec(ii)+yvec(ii)-2*Kx)/sqrt(2) <= 5*dx
+        indreg = [indreg ii];
+    end
+end
+xvecind = xvec(indreg);
+yvecind = yvec(indreg);
+uind = smooth4([xvecind', yvecind'],fu,2); % This needs update to work!!!
+
+u = fu(xvec', yvec');
+u(indreg) = uind;
 
 % u0=max((1/2)*(xvec+yvec)-Kx,zeros(1,length(xvec)));
 % u=u0';
@@ -74,15 +85,15 @@ u = smooth4([xvec', yvec'],fu,2);
 % axis tight
 % hold off
 
-figure(2)
-tri = delaunay(xvec',yvec');
-trisurf(tri, xvec', yvec', u);
-shading interp
-colorbar
-view(2)
-axis vis3d
-% axis equal
-axis tight
+% figure(2)
+% tri = delaunay(xvec',yvec');
+% trisurf(tri, xvec', yvec', u);
+% shading interp
+% colorbar
+% view(2)
+% axis vis3d
+% % axis equal
+% axis tight
 
 %% RBF
 phi='phs';

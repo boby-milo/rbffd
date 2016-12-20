@@ -13,14 +13,14 @@ rho=0.5; %rho=[1 0.5; 0.5 1];
 T=1;
 K=1;
 %% Grid
-Kx=1;
+Kx=1/Kmul;
 
 % Nx=100;
 i=1:Nx;
 Ki=2*Kx;
-S=4*Ki;
+S=1;
 
-g=3; %tune this! 1,2,3,4,5
+g=5; %tune this! 1,2,3,4,5
 
 c=2*Ki/g;
 
@@ -69,15 +69,15 @@ u=u0';
 % axis tight
 % hold off
 
-figure(2)
-tri = delaunay(xvec',yvec');
-trisurf(tri, xvec', yvec', u);
-shading interp
-colorbar
-view(2)
-axis vis3d
-% axis equal
-axis tight
+% figure(2)
+% tri = delaunay(xvec',yvec');
+% trisurf(tri, xvec', yvec', u);
+% shading interp
+% colorbar
+% view(2)
+% axis vis3d
+% % axis equal
+% axis tight
 
 %% RBF
 phi='phs';
