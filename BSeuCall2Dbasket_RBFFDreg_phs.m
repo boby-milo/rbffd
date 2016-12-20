@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDreg_phs(Nx,p,ep,M,Kmul)
+function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDreg_phs(Nx,p,d,M,Kmul)
 %% 2D EU Call RBF-FD with BDF2
 % 2016-02-04 sparse
 load('UrefEU.mat')
@@ -35,7 +35,7 @@ indcf=1;
 indff=[length(xvec)-Nx+1:length(xvec)];
 indin=ind; indin([indff,indcf])=[];
 
-L=8;
+L=1;
 Nlinsq=sqrt(ceil(N*2-sqrt(N*2)));
 dx=L/(Nlinsq-1);
 
@@ -78,58 +78,60 @@ m = nchoosek(p+dim, p); %number of polynomial terms;
 n = round(2.5*m);
 s = [xvec' yvec'];
 
-parallel = 1;
-W = BSweights2Drbffd_phs(r,sig1,sig2,rho,s,N,n,m,p,indin,phi,ep,'reg',parallel);
+parallel = 0;
+W = BSweights2Drbffd_phs(r,sig1,sig2,rho,s,N,n,m,p,indin,phi,d,'reg',parallel);
 
 %% Integration
 I = speye(size(W));
 % BDF-1
-u1=u;
-A=I-dt*W;
+u1 = u;
+A = I-dt*W;
 
-b=u1;
-b(indff)=0.5*(xvec(indff)+yvec(indff))-Kx*exp(-r*dt);
+b = u1;
+b(indff) = 0.5*(xvec(indff)+yvec(indff))-Kx*exp(-r*dt);
 
-u=A\b;
-u=max(u,zeros(size(u)));
+u = A\b;
+u = max(u,zeros(size(u)));
 
 % BDF-2
-A=I-(2/3)*dt*W;
-rcm=symrcm(A);
-A=A(rcm,rcm);
-[L1, U1]=lu(A);
-for ii=3:M
-    u2=u1;
-    u1=u;
-    b=(4/3)*u1-(1/3)*u2;
-    b(indff)=0.5*(xvec(indff)+yvec(indff))-Kx*exp(-r*(ii-1)*dt);
+A = I-(2/3)*dt*W;
+rcm = symrcm(A);
+A = A(rcm,rcm);
+[L1, U1] = lu(A);
+for ii = 3:M
+    u2 = u1;
+    u1 = u;
+    b = (4/3)*u1-(1/3)*u2;
+    b(indff) = 0.5*(xvec(indff)+yvec(indff))-Kx*exp(-r*(ii-1)*dt);
 
-    u(rcm)=L1\b(rcm);
-    u(rcm)=U1\u(rcm);
+    u(rcm) = L1\b(rcm);
+    u(rcm) = U1\u(rcm);
 
-    u=max(u,zeros(size(u)));
+    u = max(u,zeros(size(u)));
 end
-tim=toc;
+tim = toc;
 
 
 %% Error
-% indreg=[];
-% for ii=1:length(xvec)
+% indreg = [];
+% for ii = 1:length(xvec)
 %     %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
 %     if xvec(ii)>=1/3*Kx && xvec(ii)<=5/3*Kx && yvec(ii)>=1/3*Kx && yvec(ii)<=5/3*Kx
-%         indreg=[indreg ii];
+%         indreg = [indreg ii];
 %     end
 % end
 
-xvec=K*Kmul*xvec;
-yvec=K*Kmul*yvec;
-u=K*Kmul*u;
+xvec = K*Kmul*xvec;
+yvec = K*Kmul*yvec;
+dx = K*Kmul*dx;
+u = K*Kmul*u;
 
-x=[xvec' yvec'];
+
+x = [xvec' yvec'];
 
 
-uinterp=griddata(xulti,yulti,uulti,xvec,yvec,'cubic');
+uinterp = griddata(xulti,yulti,uulti,xvec,yvec,'cubic');
 
-err=uinterp'-u;
+err = uinterp'-u;
 
 end

@@ -1,27 +1,72 @@
-% clc
+clc
 clear
 % close all
 
 warning off
 dbstop if error
+
+ppar = gcp();
 pctRunOnAll warning off
 
 Kmul = 8;
-M = 100; 
+M = 100;
 
 runnumber = 1;
 
-N = [10, 20, 40, 80, 160];
-d = 7;
-p = 7;
+N = [20, 40, 60, 80, 100, 120, 140, 160];
 
-[u,err,tim,x,dx,n,Ntot,W] = BSeuCall2Dbasket_RBFFDreg_phs(N,p,d,M,Kmul);
 
-disp([N,d,p]);
-disp(norm(err,Inf));
-disp(tim);
+for ii = 1:numel(N)
+    
+    
+    F0 = parfeval(@BSeuCallbasket2D_FD,7,N(ii),M,Kmul);
+    
+    d = 5;
+    p = 5;
+    F1 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M,Kmul);
+    
+    d = 7;
+    p = 7;
+    F2 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M,Kmul);
+    
+    
+    
+    [uF0{ii},errF0{ii},timF0,xF0{ii},dxF0(ii),NtotF0(ii),~] = fetchOutputs(F0);
+%     disp([int2str(ii),' F0 ', num2str(timF0)])
+%     disp([NtotF0(ii),d,p]);
+    erF0(ii) = norm(errF0{ii},Inf);
+%     disp(erF0(ii));
+    
+    [uF1{ii},errF1{ii},timF1,xF1{ii},dxF1(ii),nF1(ii),NtotF1(ii),~] = fetchOutputs(F1);
+    disp([int2str(ii),' F1 ', num2str(timF1)])
+    disp([NtotF1(ii),d,p]);
+    erF1(ii) = norm(errF1{ii},Inf);
+    disp(erF1(ii));
+    
+    [uF2{ii},errF2{ii},timF2,xF2{ii},dxF2(ii),nF2(ii),NtotF2(ii),~] = fetchOutputs(F2);
+    disp([int2str(ii),' F2 ', num2str(timF2)])
+    disp([NtotF2(ii),d,p]);
+    erF2(ii) = norm(errF2{ii},Inf);
+    disp(erF2(ii));
+    
+    f=figure(runnumber)
+    clf
+    loglog(dxF0,erF0,'-*')
+    hold on
+    loglog(dxF1,erF1,'-*')
+    loglog(dxF2,erF2,'-*')
+    title('BSeuCall2Dbasket')
+    legend('FD2\_reg\_square','PHSd5p5\_reg\_triangle', 'PHSd7p7\_reg\_triangle')
+    xlabel('h')
+    ylabel('\Deltau_{max}')
+    drawnow
+end
 
-xvec = x(:,1); yvec = x(:,2);
+% disp([N,d,p]);
+% disp(norm(err,Inf));
+% disp(tim);
+
+% xvec = x(:,1); yvec = x(:,2);
 
 % figure(1)
 % clf
@@ -34,53 +79,53 @@ xvec = x(:,1); yvec = x(:,2);
 % axis tight
 % hold off
 
-figure(1)
-tri = delaunay(xvec,yvec);
-trisurf(tri, xvec, yvec, u);
-shading interp
-colorbar
-view(2)
-axis vis3d
-axis tight
-
-figure(2)
+% figure(1)
 % tri = delaunay(xvec,yvec);
-trisurf(tri, xvec, yvec, err);
-shading interp
-colorbar
-view(2)
-axis vis3d
-axis tight
+% trisurf(tri, xvec, yvec, u);
+% shading interp
+% colorbar
+% view(2)
+% axis vis3d
+% axis tight
+% 
+% figure(2)
+% % tri = delaunay(xvec,yvec);
+% trisurf(tri, xvec, yvec, err);
+% shading interp
+% colorbar
+% view(2)
+% axis vis3d
+% axis tight
 
 % N = [25, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600];
-% 
+%
 % Kx = 1;
 
 % %% Run
 % for ii = 1:numel(N)
-%     
+%
 %     n=5;
 %     F0 = parfeval(@BSeuCall1D_RBFFDadapsmooth,7,N(ii),n,M,Kmul);
-%     
+%
 %     F1 = parfeval(@BSeuCall1D_FD2half,8,N(ii),M,Kmul);
 %     F2 = parfeval(@BSeuCall1D_FD4half,8,N(ii),M,Kmul);
 %     F3 = parfeval(@BSeuCall1D_FD2,7,N(ii),M,Kmul);
-%     
-%     
-%     
-%     
+%
+%
+%
+%
 %     d = 5;
-%     p = 5; 
+%     p = 5;
 % %     F4 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
 %     F4 = parfeval(@BSeuCall1D_RBFFDreg_phs_smooth,7,N(ii),p,d,M,Kmul);
-%     
+%
 % %     F5 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
 %     F5 = parfeval(@BSeuCall1D_RBFFDreg_phs_adap_smooth,7,N(ii),p,d,M,Kmul);
-%     
-%     p = 7; 
+%
+%     p = 7;
 % %     F6 = parfeval(@BSeuCall1D_RBFFDreg_phs,7,N(ii),n,r,M,Kmul);
 %     F6 = parfeval(@BSeuCall1D_RBFFDreg_phs_adap_smooth,7,N(ii),p,d,M,Kmul);
-%     
+%
 %     [uF0{ii},errF0{ii},timF0,xF0{ii},dxF0(ii),~,~] = fetchOutputs(F0);
 %     disp([int2str(ii),' F0 ', num2str(timF0)])
 %     [uF1{ii},errF1{ii},timF1,xF1{ii},dxF1(ii),~,~,~] = fetchOutputs(F1);
@@ -89,17 +134,17 @@ axis tight
 %     disp([int2str(ii),' F2 ', num2str(timF2)])
 %     [uF3{ii},errF3{ii},timF3,xF3{ii},dxF3(ii),~,~] = fetchOutputs(F3);
 %     disp([int2str(ii),' F3 ', num2str(timF3)])
-%     
+%
 %     [uF4{ii},errF4{ii},timF4,xF4{ii},dxF4(ii),~,~] = fetchOutputs(F4);
 %     disp([int2str(ii),' F4 ', num2str(timF4)])
-%     
+%
 %     [uF5{ii},errF5{ii},timF5,xF5{ii},dxF5(ii),~,~] = fetchOutputs(F5);
 %     disp([int2str(ii),' F5 ', num2str(timF5)])
-%     
+%
 %     [uF6{ii},errF6{ii},timF6,xF6{ii},dxF6(ii),~,~] = fetchOutputs(F6);
 %     disp([int2str(ii),' F6 ', num2str(timF6)])
-%     
-%     
+%
+%
 %     indreg=[];
 %     for jj = 1:length(xF1{ii})
 %         %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
@@ -107,9 +152,9 @@ axis tight
 %             indreg=[indreg jj];
 %         end
 %     end
-%     
+%
 %     xind = xF1{ii}(indreg);
-%     
+%
 %     errF5crop{ii} = errF5{ii}(indreg);
 %     errF6crop{ii} = errF6{ii}(indreg);
 %     errF0crop{ii} = errF0{ii}(indreg);
@@ -117,7 +162,7 @@ axis tight
 %     errF1crop{ii} = errF1{ii}(indreg);
 %     errF2crop{ii} = errF2{ii}(indreg);
 %     errF3crop{ii} = errF3{ii}(indreg);
-%     
+%
 %     erF5(ii) = max(abs(errF5crop{ii}));
 %     erF6(ii) = max(abs(errF6crop{ii}));
 %     erF0(ii) = max(abs(errF0crop{ii}));
@@ -125,7 +170,7 @@ axis tight
 %     erF1(ii) = max(abs(errF1crop{ii}));
 %     erF2(ii) = max(abs(errF2crop{ii}));
 %     erF3(ii) = max(abs(errF3crop{ii}));
-%     
+%
 %     figure(runnumber)
 %     clf
 %     loglog(dxF0,erF0,'-*')

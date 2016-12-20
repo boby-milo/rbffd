@@ -9,14 +9,14 @@ elseif nargin == 11
     parallel = 0;
 end
 
-if parallel
-    ppar = gcp();
-    argfor = ppar.NumWorkers;
-else
-    ppar = gcp('nocreate');
-%     delete(p);
-    argfor = 0;
-end
+% if parallel
+%     ppar = gcp();
+%     argfor = ppar.NumWorkers;
+% else
+%     ppar = gcp('nocreate');
+% %     delete(p);
+%     argfor = 0;
+% end
 
 % Weights
 indc = findKNearestNeighbors(s,s,n);
@@ -25,8 +25,8 @@ iind = repmat(indin,n,1); iind = iind(:); %n*N
 jind = transpose(indc(indin,:)); jind = jind(:);%n*N
 Wval = zeros(n,numel(indin));  %n*N
 
-parfor (ii = indin, argfor)
-% for ii = indin
+% parfor (ii = indin, argfor)
+for ii = indin
     sc = s(ii,:); xc = sc(:,1); yc = sc(:,2);
     se = s(indc(ii,:),:);
     
