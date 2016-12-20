@@ -91,7 +91,7 @@ phi='phs';
 dim = 2; %problem dimension
 
 m = nchoosek(p+dim, p); %number of polynomial terms;
-n = round(2.5*m);
+n = round(2*m);
 s = [xvec' yvec'];
 
 parallel = 0;
