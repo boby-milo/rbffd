@@ -1,4 +1,4 @@
- function [u,err,tim,x,dx,N,W] = BSamPutbasket2D_RBFFDadapEpsmin(Nx,n,M,fit)
+function [u,err,tim,x,dx,N,W] = BSamPutbasket2D_RBFFDadapEpsmin(Nx,n,M,fit)
 %% 2D AM Put RBF-FD with BDF2
 % 2016-02-04 sparse
 load('UrefAM.mat')
@@ -47,7 +47,7 @@ xvec=[]; yvec=[];
 for ii=1:numel(x)
     xl=linspace(0,x(ii),ii);
     yl=linspace(x(ii),0,ii);
-
+    
     xvec=[xvec,xl];
     yvec=[yvec,yl];
 end
@@ -83,7 +83,7 @@ lambda=zeros(N,1);
 % axis equal
 % axis tight
 % hold off
-% 
+%
 % figure(2)
 % tri = delaunay(xvec',yvec');
 % trisurf(tri, xvec', yvec', u);
@@ -107,13 +107,14 @@ Wval=zeros(n,numel(indin));  %n*N
 
 % internal points {
 bb=0;
+lc=zeros(n+1,1);
 for ii=indin
     bb=bb+1;
-%     ii
+    %     ii
     %     showsten(1,Nx,xvec,yvec,indc); pause()
     sc=[xvec(ii),yvec(ii)]; xc=sc(:,1); yc=sc(:,2);
     se=s(indc(ii,:),:);
-
+    
     Rc=xcdist(se,se,1);
     
     H=Rc(:,:,1);
@@ -121,24 +122,28 @@ for ii=indin
     ep=gamma/hmin;
     
     A=RBFmat(phi,ep,Rc,'0',1);
-
+    
     Ax=RBFmat(phi,ep,Rc,'1',1);
     Ay=RBFmat(phi,ep,Rc,'1',2);
-
+    
     Axx=RBFmat(phi,ep,Rc,'2',1);
     Ayy=RBFmat(phi,ep,Rc,'2',2);
     Axy=RBFmat(phi,ep,Rc,'m2',1:2);
-
-    l=transpose(-r*A(1,:)...
+    
+    o = ones(1,n);
+    Ac = [A, transpose(o);
+        o, 0];
+    
+    lc(1:n,1) = transpose(-r*A(1,:)...
         +r*xc'.*Ax(1,:)+r*yc'.*Ay(1,:)...
         +0.5*sig1^2*xc'.^2.*Axx(1,:)...
         +0.5*sig2^2*yc'.^2.*Ayy(1,:)...
         +rho*sig1*sig2*xc'.*yc'.*Axy(1,:));
-
-    wc=A\l;
-    %     wc=rbffd2(ii,xc,yc,indc(ii,:),r,sig1,sig2,rho,A,Ax,Ay,Axx,Ayy,Axy);
-
-    Wval(:,bb)=wc;
+    
+    lc(n+1,1) = -r;
+    
+    wc = Ac\lc;
+    Wval(:,ii-1) = wc(1:end-1);
 end
 % } internal points
 Wval=Wval(:);
@@ -173,10 +178,10 @@ rcm=symrcm(A);
 A=A(rcm,rcm);
 [L1, U1]=lu(A);
 for ii=3:M
-%     waitbar(ii/M)
+    %     waitbar(ii/M)
     u2=u1;
     u1=u;
-
+    
     b=(4/3)*u1 - (1/3)*u2 + (2/3)*dt*lambda;
     
     util(rcm)=L1\b(rcm);

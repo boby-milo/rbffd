@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDadapEpsAvg(Nx,n,M,g)
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDadapEpsavg(Nx,n,M,g)
 %K,T,r,sig,M
 %% 1D European Call RBF-FD
 % Copyright 2015, Slobodan Milovanovic 
