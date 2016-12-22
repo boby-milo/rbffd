@@ -1,7 +1,8 @@
-function [util] = smooth4(s,u,dim)
+function [util] = smooth4(s,u,hloc,dim)
 %Performs 4th order smoothing od the initial data.
 %   s - grid points
 %   u - initial condition function handle
+%   indc - indices of the nearest neighbors for each point
 %   util - discrete smoothed initial condition corresponding to s
 
 if nargin == 2
@@ -22,8 +23,8 @@ switch dim
         
     case 2
         util = u(s(:,1),s(:,2));
-        h = s(2,2) - s(1,2);
         for ii = 1:numel(s(:,1))
+            h = hloc(ii);
             util(ii) = (1/h^2) * integral2(@(x,y) f4(x/h).*f4(y/h).*u(s(ii,1)-x, s(ii,2)-y),-3*h,3*h,-3*h,3*h);
         end
 end

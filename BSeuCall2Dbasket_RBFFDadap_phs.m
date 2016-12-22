@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDadap_phs(Nx,p,d,M,Kmul)
+function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDadap_phs(Nx,p,d,M,Kmul,g)
 %% 2D EU Call RBF-FD with BDF2
 % 2016-02-04 sparse
 load('UrefEU.mat')
@@ -20,7 +20,7 @@ i=1:Nx;
 Ki=2*Kx;
 S=1;
 
-g=5; %tune this! 1,2,3,4,5
+% g=5; %tune this! 1,2,3,4,5
 
 c=2*Ki/g;
 

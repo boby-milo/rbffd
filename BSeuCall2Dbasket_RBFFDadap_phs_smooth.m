@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDadap_phs_smooth(Nx,p,d,M,Kmul)
+function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDadap_phs_smooth(Nx,p,d,M,Kmul,g)
 %% 2D EU Call RBF-FD with BDF2
 % 2016-02-04 sparse
 load('UrefEU.mat')
@@ -20,7 +20,7 @@ i=1:Nx;
 Ki=2*Kx;
 S=1;
 
-g=5; %tune this! 1,2,3,4,5
+% g=5; %tune this! 1,2,3,4,5
 
 c=2*Ki/g;
 
@@ -54,47 +54,6 @@ dx=L/(Nlinsq-1);
 dt=T/(M-1);
 t=T:-dt:0;
 
-%% Initial condition
-fu = @(s1, s2) max((1/2)*(s1+s2)-Kx, 0);
-
-indreg = [];
-for ii = 1:length(xvec)
-    %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
-    if abs(xvec(ii)+yvec(ii)-2*Kx)/sqrt(2) <= 5*dx
-        indreg = [indreg ii];
-    end
-end
-xvecind = xvec(indreg);
-yvecind = yvec(indreg);
-uind = smooth4([xvecind', yvecind'],fu,2); % This needs update to work!!!
-
-u = fu(xvec', yvec');
-u(indreg) = uind;
-
-% u0=max((1/2)*(xvec+yvec)-Kx,zeros(1,length(xvec)));
-% u=u0';
-
-% figure(1)
-% clf
-% plot(xvec,yvec,'.')
-% hold on
-% plot(xvec(indff),yvec(indff),'*')
-% plot(xvec(indcf),yvec(indcf),'^')
-% plot(xvec(indin),yvec(indin),'o')
-% axis equal
-% axis tight
-% hold off
-
-% figure(2)
-% tri = delaunay(xvec',yvec');
-% trisurf(tri, xvec', yvec', u);
-% shading interp
-% colorbar
-% view(2)
-% axis vis3d
-% % axis equal
-% axis tight
-
 %% RBF
 phi='phs';
 
@@ -105,7 +64,59 @@ n = round(2.5*m);
 s = [xvec' yvec'];
 
 parallel = 0;
-W = BSweights2Drbffd_phs(r,sig1,sig2,rho,s,N,n,m,p,indin,phi,d,'reg',parallel);
+[W, hloc] = BSweights2Drbffd_phs(r,sig1,sig2,rho,s,N,n,m,p,indin,phi,d,'adap',parallel);
+
+%% Initial condition
+fu = @(s1, s2) max((1/2)*(s1+s2)-Kx, 0);
+
+indreg = [];
+for ii = 1:length(xvec)
+    %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
+    if abs(xvec(ii)+yvec(ii)-2*Kx)/sqrt(2) <= 3*dx
+        indreg = [indreg ii];
+    end
+end
+hlocind = hloc(indreg);
+xvecind = xvec(indreg);
+yvecind = yvec(indreg);
+uind = smooth4([xvecind', yvecind'],fu,hlocind,2);
+
+u = fu(xvec', yvec');
+u(indreg) = uind;
+
+% u0=max((1/2)*(xvec+yvec)-Kx,zeros(1,length(xvec)));
+% u=u0';
+
+figure(1)
+clf
+plot(xvec,yvec,'.')
+hold on
+plot(xvec(indff),yvec(indff),'*')
+plot(xvec(indcf),yvec(indcf),'^')
+plot(xvec(indin),yvec(indin),'o')
+axis equal
+axis tight
+hold off
+
+figure(2)
+tri = delaunay(xvec',yvec');
+trisurf(tri, xvec', yvec', u);
+shading interp
+colorbar
+view(2)
+axis vis3d
+% axis equal
+axis tight
+
+figure(3)
+% tri = delaunay(xvec',yvec');
+trisurf(tri, xvec', yvec', u-fu(xvec',yvec'));
+shading interp
+colorbar
+view(2)
+axis vis3d
+% axis equal
+axis tight
 
 %% Integration
 I = speye(size(W));

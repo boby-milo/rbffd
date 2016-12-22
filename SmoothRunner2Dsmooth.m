@@ -8,12 +8,13 @@ dbstop if error
 ppar = gcp();
 pctRunOnAll warning off
 
-Kmul = 8;
+Kmul = 4;
 
-runnumber = 2;
+runnumber = 4;
+runtitle = 'Smooth n/m = 5';
 
 N = [40, 80, 120, 160, 200, 240, 280, 320];
-M = 8*N;
+M = 4*N;
 
 xo = 10.^(-2:0.1:0);
 yo2 = (1/10)*xo.^2;
@@ -24,23 +25,23 @@ for ii = 1:numel(N)
     
     F0 = parfeval(@BSeuCallbasket2D_FD,7,N(ii),M(ii),Kmul);
     
-    
-    g = 5;
-    
     d = 3;
     p = 5;
-    
     F1 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M(ii),Kmul);
     F3 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
-    F5 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs,8,N(ii),p,d,M(ii),Kmul,g);
-    F7 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs_smooth,8,N(ii),p,d,M(ii),Kmul,g);
+    
+    p = p+2;
+    F5 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
+    %     F7 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
     
     d = 5;
     p = 7;
     F2 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M(ii),Kmul);
     F4 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
-    F6 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs,8,N(ii),p,d,M(ii),Kmul,g);
-    F8 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs_smooth,8,N(ii),p,d,M(ii),Kmul,g);
+    
+    p = p+2;
+    F6 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
+    %     F8 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
     
     
     [uF0{ii},errF0{ii},timF0,xF0{ii},dxF0(ii),NtotF0(ii),~] = fetchOutputs(F0);
@@ -85,17 +86,17 @@ for ii = 1:numel(N)
     erF6(ii) = norm(errF6{ii},Inf);
     disp(erF6(ii));
     
-    [uF7{ii},errF7{ii},timF7,xF7{ii},dxF7(ii),nF7(ii),NtotF7(ii),~] = fetchOutputs(F7);
-    disp([int2str(ii),' F7 ', num2str(timF7)])
-    disp([NtotF7(ii),d,p, nF7(ii)]);
-    erF7(ii) = norm(errF7{ii},Inf);
-    disp(erF7(ii));
-    
-    [uF8{ii},errF8{ii},timF8,xF8{ii},dxF8(ii),nF8(ii),NtotF8(ii),~] = fetchOutputs(F8);
-    disp([int2str(ii),' F8 ', num2str(timF8)])
-    disp([NtotF8(ii),d,p, nF8(ii)]);
-    erF8(ii) = norm(errF8{ii},Inf);
-    disp(erF8(ii));
+    %     [uF7{ii},errF7{ii},timF7,xF7{ii},dxF7(ii),nF7(ii),NtotF7(ii),~] = fetchOutputs(F7);
+    %     disp([int2str(ii),' F7 ', num2str(timF7)])
+    %     disp([NtotF7(ii),d,p, nF7(ii)]);
+    %     erF7(ii) = norm(errF7{ii},Inf);
+    %     disp(erF7(ii));
+    %
+    %     [uF8{ii},errF8{ii},timF8,xF8{ii},dxF8(ii),nF8(ii),NtotF8(ii),~] = fetchOutputs(F8);
+    %     disp([int2str(ii),' F8 ', num2str(timF8)])
+    %     disp([NtotF8(ii),d,p, nF8(ii)]);
+    %     erF8(ii) = norm(errF8{ii},Inf);
+    %     disp(erF8(ii));
     
     f=figure(runnumber);
     clf
@@ -105,26 +106,28 @@ for ii = 1:numel(N)
     loglog(dxF2,erF2,'-^')
     loglog(dxF3,erF3,'-o')
     loglog(dxF4,erF4,'-o')
-    loglog(dxF5,erF5,'-*')
-    loglog(dxF6,erF6,'-*')
-        loglog(dxF7,erF7,'-')
-        loglog(dxF8,erF8,'-')
+    loglog(dxF5,erF5,'-o')
+    loglog(dxF6,erF6,'-o')
+    %     loglog(dxF7,erF7,'-')
+    %     loglog(dxF8,erF8,'-')
     
     loglog(xo,yo2,'k--')
     loglog(xo,yo4,'k--')
     xlim([1e-2,1e0]);
+    ylim([1e-9,1e-1]);
     
     
-    title('BSeuCall2Dbasket')
+    title(runtitle)
     legend('FD2\_reg\_square',... %F0
-        'PHSd3p5\_reg\_triangle',... %F1
-        'PHSd5p7\_reg\_triangle',... %F2
-        'PHSd3p5\_reg\_triangle\_smooth',... %F3
-        'PHSd5p7\_reg\_triangle\_smooth',... %F4
-        'PHSd3p5\_adap\_triangle',... %F5
-        'PHSd5p7\_adap\_triangle',... %F6
-        'PHSd3p5\_adap\_triangle\_smooth',... %F7
-        'PHSd5p7\_adap\_triangle\_smooth') %F8
+        'F1',... %F1
+        'F2',... %F2
+        'F3',... %F3
+        'F4',... %F4
+        'F5',... %F5
+        'F6',... %F6
+        'Location','SE'); 
+    %         'PHSd3p5\_adap\_triangle\_smooth',... %F7
+    %         'PHSd5p7\_adap\_triangle\_smooth') %F8
     xlabel('h')
     ylabel('\Deltau_{max}')
     set(gca,'fontsize',18)

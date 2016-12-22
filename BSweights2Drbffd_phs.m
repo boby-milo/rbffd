@@ -1,4 +1,4 @@
-function W = BSweights2Drbffd_phs(r,sig1,sig2,rho,s,N,n,m,p,indin,phi,ep,adap,parallel)
+function [W,hloc] = BSweights2Drbffd_phs(r,sig1,sig2,rho,s,N,n,m,p,indin,phi,ep,adap,parallel)
 % Constructs a BS differentiation matrix W from 2D grid s,
 %stencil size n and indices indin.
 
@@ -18,7 +18,6 @@ end
 %     argfor = 0;
 % end
 
-% Weights
 indc = findKNearestNeighbors(s,s,n);
 
 iind = repmat(indin,n,1); iind = iind(:); %n*N
@@ -26,11 +25,14 @@ jind = transpose(indc(indin,:)); jind = jind(:);%n*N
 Wval = zeros(n,numel(indin));  %n*N
 
 % parfor (ii = indin, argfor)
+hloc = zeros(size(s,1),1); 
 for ii = indin
     sc = s(ii,:); xc = sc(:,1); yc = sc(:,2);
     se = s(indc(ii,:),:);
     
     Rc = xcdist(se,se,1);
+    H = Rc(:,:,1);
+    hloc(ii) = mean(H(H>0));
     
 %     if strcmp(adap,'min')
 %         H = Rc(:,:,1);
