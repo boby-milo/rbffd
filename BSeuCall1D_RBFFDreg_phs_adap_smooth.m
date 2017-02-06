@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs_adap_smooth(Nx,p,ep,M,Kmul)
+function [u,err,tim,x,dx,N,W] = BSeuCall1D_RBFFDreg_phs_adap_smooth(Nx,p,ep,M,Kmul,nm)
 %% 1D European Call RBF-FD
 % 2016-02-06
 
@@ -62,7 +62,7 @@ phi = 'phs';
 
 % p = 1;
 m = p + 1; %number of polynomial terms;
-n = 2*m;
+n = nm*m;
 if mod(n,2)
     n = n
 else

@@ -26,7 +26,7 @@ for ii = 2:l
     xc = x(ii);
     indc = 1:n;
     a = ii;
-    
+
     wc = RBFelements(x,xc,n,m,indc,phi,ep,r,sig,a);
     Wval(:,ii-1) = wc;
     jind(:,ii-1) = indc';
@@ -37,7 +37,7 @@ for ii = (l+1):(N-l)
     xc = x(ii);
     indc = ii-l:ii+l;
     a = l+1;
-    
+
     wc = RBFelements(x,xc,n,m,indc,phi,ep,r,sig,a);
     Wval(:,ii-1) = wc;
     jind(:,ii-1) = indc';
@@ -47,7 +47,7 @@ for ii = (N-l+1):(N-1)
     xc = x(ii);
     indc = N-n+1:N;
     a = ii-N+n;
-    
+
     wc = RBFelements(x,xc,n,m,indc,phi,ep,r,sig,a);
     Wval(:,ii-1) = wc;
     jind(:,ii-1) = indc';
@@ -75,7 +75,7 @@ P = fliplr(P);
 P = P (:,1:m);
 
 
-Ac = [A, P;
+Afull = [A, P;
     P', zeros(m,m)];
 
 
@@ -85,9 +85,9 @@ i = transpose(1:m);
 lP = ((i-2)*r + 0.5*(i-2).*(i-1)*sig^2).*xc.^(i-1);
 
 
-lc = [lA; lP];
+lfull = [lA; lP];
 
 
-wc = Ac\lc;
+wc = Afull\lfull;
 wc = wc(1:n);
 end

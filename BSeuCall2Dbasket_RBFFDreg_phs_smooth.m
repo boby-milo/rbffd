@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDreg_phs_smooth(Nx,p,d,M,Kmul)
+function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDreg_phs_smooth(Nx,p,d,M,Kmul,nm)
 %% 2D EU Call RBF-FD with BDF2
 % 2016-02-04 sparse
 load('UrefEU.mat')
@@ -49,7 +49,7 @@ phi='phs';
 dim = 2; %problem dimension
 
 m = nchoosek(p+dim, p); %number of polynomial terms;
-n = round(5*m);
+n = round(nm*m);
 s = [xvec' yvec'];
 
 parallel = 0;
@@ -61,7 +61,7 @@ fu = @(s1, s2) max((1/2)*(s1+s2)-Kx, 0);
 indreg = [];
 for ii = 1:length(xvec)
     %         if (xfd(ii)-1)^2/((0.95*K)^2)+(yfd(ii)-1)^2/((0.95*K)^2)<=1
-    if abs(xvec(ii)+yvec(ii)-2*Kx)/sqrt(2) <= 3*dx
+    if abs(xvec(ii)+yvec(ii)-2*Kx)/sqrt(2) <= 6*dx
         indreg = [indreg ii];
     end
 end
@@ -76,36 +76,39 @@ u(indreg) = uind;
 % u0=max((1/2)*(xvec+yvec)-Kx,zeros(1,length(xvec)));
 % u=u0';
 
-figure(1)
-clf
-plot(xvec,yvec,'.')
-hold on
-plot(xvec(indff),yvec(indff),'*')
-plot(xvec(indcf),yvec(indcf),'^')
-plot(xvec(indin),yvec(indin),'o')
-axis equal
-axis tight
-hold off
-
-figure(2)
-tri = delaunay(xvec',yvec');
-trisurf(tri, xvec', yvec', u);
-shading interp
-colorbar
-view(2)
-axis vis3d
+% figure(1)
+% clf
+% plot(xvec,yvec,'.')
+% hold on
+% plot(xvec(indreg),yvec(indreg),'sq');
+% plot(xvec(indff),yvec(indff),'*')
+% plot(xvec(indcf),yvec(indcf),'^')
+% plot(xvec(indin),yvec(indin),'o')
 % axis equal
-axis tight
-
-figure(3)
+% axis tight
+% hold off
+% 
+% figure(2)
 % tri = delaunay(xvec',yvec');
-trisurf(tri, xvec', yvec', u-fu(xvec',yvec'));
-shading interp
-colorbar
-view(2)
-axis vis3d
-% axis equal
-axis tight
+% trisurf(tri, xvec', yvec', u);
+% shading interp
+% colorbar
+% view(2)
+% axis vis3d
+% % axis equal
+% axis tight
+% 
+% figure(3)
+% % tri = delaunay(xvec',yvec');
+% trisurf(tri, xvec', yvec', u-fu(xvec',yvec'));
+% shading interp
+% colorbar
+% view(2)
+% axis vis3d
+% % axis equal
+% axis tight
+% 
+% pause()
 
 %% Integration
 I = speye(size(W));

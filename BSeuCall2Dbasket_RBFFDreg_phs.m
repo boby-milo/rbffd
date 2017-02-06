@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDreg_phs(Nx,p,d,M,Kmul)
+function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDreg_phs(Nx,p,d,M,Kmul,nm)
 %% 2D EU Call RBF-FD with BDF2
 % 2016-02-04 sparse
 load('UrefEU.mat')
@@ -75,7 +75,7 @@ phi='phs';
 dim = 2; %problem dimension
 
 m = nchoosek(p+dim, p); %number of polynomial terms;
-n = round(2*m);
+n = round(nm*m);
 s = [xvec' yvec'];
 
 parallel = 0;

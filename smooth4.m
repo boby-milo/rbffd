@@ -24,7 +24,9 @@ switch dim
     case 2
         util = u(s(:,1),s(:,2));
         for ii = 1:numel(s(:,1))
-            h = hloc(ii);
+%             h = hloc(ii);
+            h = min(hloc);
+%             max(hloc)-min(hloc)
             util(ii) = (1/h^2) * integral2(@(x,y) f4(x/h).*f4(y/h).*u(s(ii,1)-x, s(ii,2)-y),-3*h,3*h,-3*h,3*h);
         end
 end

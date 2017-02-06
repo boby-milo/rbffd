@@ -10,8 +10,8 @@ pctRunOnAll warning off
 
 Kmul = 4;
 
-runnumber = 4;
-runtitle = 'Smooth n/m = 5';
+runnumber = 2;
+runtitle = 'smooth min hloc';
 
 N = [40, 80, 120, 160, 200, 240, 280, 320];
 M = 4*N;
@@ -25,22 +25,24 @@ for ii = 1:numel(N)
     
     F0 = parfeval(@BSeuCallbasket2D_FD,7,N(ii),M(ii),Kmul);
     
+    nm = 2;
+    
     d = 3;
-    p = 5;
-    F1 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M(ii),Kmul);
-    F3 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
+    p = 3;
+    F1 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M(ii),Kmul,nm);
+    F3 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul,nm);
     
     p = p+2;
-    F5 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
+    F5 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul,nm);
     %     F7 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
     
     d = 5;
-    p = 7;
-    F2 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M(ii),Kmul);
-    F4 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
+    p = 5;
+    F2 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs,8,N(ii),p,d,M(ii),Kmul,nm);
+    F4 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul,nm);
     
     p = p+2;
-    F6 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
+    F6 = parfeval(@BSeuCall2Dbasket_RBFFDreg_phs_smooth,8,N(ii),p,d,M(ii),Kmul,nm);
     %     F8 = parfeval(@BSeuCall2Dbasket_RBFFDadap_phs_smooth,8,N(ii),p,d,M(ii),Kmul);
     
     
