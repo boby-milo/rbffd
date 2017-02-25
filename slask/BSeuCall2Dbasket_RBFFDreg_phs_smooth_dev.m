@@ -1,6 +1,15 @@
-function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDadap_phs_smooth(Nx,p,d,M,Kmul,g,nm)
+% function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDreg_phs_smooth(Nx,p,d,M,Kmul,nm)
 %% 2D EU Call RBF-FD with BDF2
 % 2016-02-04 sparse
+
+Nx = 100;
+p = 2;
+d = 2;
+M = 100;
+Kmul = 4;
+% g = 5;
+nm = 2;
+
 load('UrefEU.mat')
 
 tic
@@ -15,36 +24,24 @@ K=1;
 
 %% Grid
 Kx=1/Kmul;
-
-% Nx=100;
-i=1:Nx;
-Ki=2*Kx;
-S=1;
-
-% g=5; %tune this! 1,2,3,4,5
-
-c=2*Ki/g;
-
-dxi=(1/Nx)*(asinh((S-Ki)/c)-asinh(-Ki/c));
-xi=asinh(-Ki/c)+i*dxi;
-x=[0, Ki+c*sinh(xi)];
-y=zeros(numel(x),1);
-Kind=-x(x<=Ki)+Ki;
+x=transpose(linspace(0,1,Nx));
+% dx=x(2)-x(1)
+y=x;
 
 xvec=[]; yvec=[];
-for ii=1:numel(x)
+for ii=1:Nx
     xl=linspace(0,x(ii),ii);
     yl=linspace(x(ii),0,ii);
-    
+
     xvec=[xvec,xl];
     yvec=[yvec,yl];
 end
 
 N=numel(xvec);
-ind=1:N;
 
+ind=1:N;
 indcf=1;
-indff=(N-numel(x)+1):N;
+indff=[length(xvec)-Nx+1:length(xvec)];
 indin=ind; indin([indff,indcf])=[];
 
 L=1;
@@ -65,7 +62,7 @@ n = round(nm*m);
 s = [xvec' yvec'];
 
 parallel = 0;
-[W, hloc] = BSweights2Drbffd_phs(r,sig1,sig2,rho,s,N,n,m,p,indin,phi,d,'adap',parallel);
+[W, hloc] = BSweights2Drbffd_phs(r,sig1,sig2,rho,s,N,n,m,p,indin,phi,d,'reg',parallel);
 
 %% Initial condition
 fu = @(s1, s2) max((1/2)*(s1+s2)-Kx, 0);
@@ -88,39 +85,39 @@ u(indreg) = uind;
 % u0=max((1/2)*(xvec+yvec)-Kx,zeros(1,length(xvec)));
 % u=u0';
 
-% figure(1)
-% clf
-% plot(xvec,yvec,'.')
-% hold on
-% plot(xvec(indreg),yvec(indreg),'sq');
-% plot(xvec(indff),yvec(indff),'*')
-% plot(xvec(indcf),yvec(indcf),'^')
-% plot(xvec(indin),yvec(indin),'o')
+figure(1)
+clf
+plot(xvec,yvec,'.')
+hold on
+plot(xvec(indreg),yvec(indreg),'sq');
+plot(xvec(indff),yvec(indff),'*')
+plot(xvec(indcf),yvec(indcf),'^')
+plot(xvec(indin),yvec(indin),'o')
+axis equal
+axis tight
+hold off
+
+figure(2)
+tri = delaunay(xvec',yvec');
+trisurf(tri, xvec', yvec', u);
+shading interp
+colorbar
+view(2)
+axis vis3d
 % axis equal
-% axis tight
-% hold off
-% 
-% figure(2)
+axis tight
+
+figure(3)
 % tri = delaunay(xvec',yvec');
-% trisurf(tri, xvec', yvec', u);
-% shading interp
-% colorbar
-% view(2)
-% axis vis3d
-% % axis equal
-% axis tight
-% 
-% figure(3)
-% % tri = delaunay(xvec',yvec');
-% trisurf(tri, xvec', yvec', u-fu(xvec',yvec'));
-% shading interp
-% colorbar
-% view(2)
-% axis vis3d
-% % axis equal
-% axis tight
-% 
-% pause()
+trisurf(tri, xvec', yvec', u-fu(xvec',yvec'));
+shading interp
+colorbar
+view(2)
+axis vis3d
+% axis equal
+axis tight
+
+pause()
 
 %% Integration
 I = speye(size(W));
@@ -152,7 +149,6 @@ for ii = 3:M
 end
 tim = toc;
 
-
 %% Error
 % indreg = [];
 % for ii = 1:length(xvec)
@@ -174,5 +170,3 @@ x = [xvec' yvec'];
 uinterp = griddata(xulti,yulti,uulti,xvec,yvec,'cubic');
 
 err = uinterp'-u;
-
-end

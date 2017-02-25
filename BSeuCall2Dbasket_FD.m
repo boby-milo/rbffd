@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,N,W]=BSeuCallbasket2D_FD(Nx,M,Kmul)
+function [u,err,tim,x,dx,n,N,W]=BSeuCall2Dbasket_FD(Nx,M,Kmul)
 %% 2D EU Call FD with BDF2
 % 05-Jul-2016
 load('UrefEU.mat')
@@ -47,6 +47,7 @@ u0=max(0.5*(xvec'+yvec')-Kx,zeros(1,length(xvec)));
 u=u0';
 
 %% FD
+n = 9;
 aa=0.5*sig1^2*xvec.^2/dx^2;
 aaa=r*xvec/(2*dx);
 bb=0.5*sig2^2*yvec.^2/dy^2;

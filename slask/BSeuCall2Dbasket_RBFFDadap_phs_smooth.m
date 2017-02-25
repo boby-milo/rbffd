@@ -1,5 +1,14 @@
-function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDreg_phs_smooth(Nx,p,d,M,Kmul,nm)
+function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDadap_phs_smooth(Nx,p,d,M,Kmul,g,nm)
 %% 2D EU Call RBF-FD with BDF2
+% 2016-02-04 sparse
+
+% Nx = 15;
+% p = 2;
+% d = 2;
+% M = 100;
+% Kmul = 4;
+% g = 5;
+% nm = 2;
 
 load('UrefEU.mat')
 
@@ -15,24 +24,36 @@ K=1;
 
 %% Grid
 Kx=1/Kmul;
-x=transpose(linspace(0,1,Nx));
-% dx=x(2)-x(1)
-y=x;
+
+% Nx=100;
+i=1:Nx;
+Ki=2*Kx;
+S=1;
+
+% g=5; %tune this! 1,2,3,4,5
+
+c=2*Ki/g;
+
+dxi=(1/Nx)*(asinh((S-Ki)/c)-asinh(-Ki/c));
+xi=asinh(-Ki/c)+i*dxi;
+x=[0, Ki+c*sinh(xi)];
+y=zeros(numel(x),1);
+Kind=-x(x<=Ki)+Ki;
 
 xvec=[]; yvec=[];
-for ii=1:Nx
+for ii=1:numel(x)
     xl=linspace(0,x(ii),ii);
     yl=linspace(x(ii),0,ii);
-
+    
     xvec=[xvec,xl];
     yvec=[yvec,yl];
 end
 
 N=numel(xvec);
-
 ind=1:N;
+
 indcf=1;
-indff=[length(xvec)-Nx+1:length(xvec)];
+indff=(N-numel(x)+1):N;
 indin=ind; indin([indff,indcf])=[];
 
 L=1;
@@ -53,7 +74,7 @@ n = round(nm*m);
 s = [xvec' yvec'];
 
 parallel = 0;
-[W, hloc] = BSweights2Drbffd_phs(r,sig1,sig2,rho,s,N,n,m,p,indin,phi,d,'reg',parallel);
+[W, hloc] = BSweights2Drbffd_phs(r,sig1,sig2,rho,s,N,n,m,p,indin,phi,d,'adap',parallel);
 
 %% Initial condition
 fu = @(s1, s2) max((1/2)*(s1+s2)-Kx, 0);
@@ -139,6 +160,7 @@ for ii = 3:M
     u = max(u,zeros(size(u)));
 end
 tim = toc;
+
 
 %% Error
 % indreg = [];
