@@ -1,6 +1,15 @@
 function [u,err,tim,x,dx,n,N,W]=BSeuCall2Dbasket_FD(Nx,M,Kmul)
 %% 2D EU Call FD with BDF2
-% 05-Jul-2016
+funname = 'BSeuCall2Dbasket_FD';
+datafilename = [funname,'___Nx',num2str(Nx),'_M',num2str(M),'_Kmul',num2str(Kmul),'.mat'];
+
+names = dir(['./Data/',datafilename]);
+
+if ~isempty(names)
+    cd('./Data')
+    load(datafilename);
+    cd('..')
+else
 load('UrefEU.mat')
 
 tic
@@ -167,4 +176,9 @@ u = K*Kmul*u;
 uinterp=griddata(xulti,yulti,uulti,xvec,yvec,'cubic');
 
 err=uinterp-u;
+
+    cd('./Data')
+    save(datafilename, 'u', 'err', 'tim', 'x', 'dx', 'n', 'N', 'W', 'Nx', 'M', 'Kmul')
+    cd('..')
+end
 end

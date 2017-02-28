@@ -1,6 +1,15 @@
 function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDadap_phs(Nx,g,p,d,nm,M,Kmul)
 %% 2D EU Call RBF-FD with BDF2
-% 2016-02-04 sparse
+funname = 'BSeuCall2Dbasket_RBFFDadap_phs';
+datafilename = [funname,'___Nx',num2str(Nx),'_g',num2str(g),'_p',num2str(p),'_d',num2str(d),'_nm',num2str(nm),'_M',num2str(M),'_Kmul',num2str(Kmul),'.mat'];
+
+names = dir(['./Data/',datafilename]);
+
+if ~isempty(names)
+    cd('./Data')
+    load(datafilename);
+    cd('..')
+else
 load('UrefEU.mat')
 
 tic
@@ -143,5 +152,10 @@ x = [xvec' yvec'];
 uinterp = griddata(xulti,yulti,uulti,xvec,yvec,'cubic');
 
 err = uinterp'-u;
+
+    cd('./Data')
+    save(datafilename, 'u', 'err', 'tim', 'x', 'dx', 'n', 'N', 'W', 'Nx', 'g', 'p', 'd', 'nm', 'M', 'Kmul')
+    cd('..')
+end
 
 end

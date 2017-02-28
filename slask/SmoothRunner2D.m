@@ -10,10 +10,10 @@ pctRunOnAll warning off
 
 Kmul = 8;
 
-runnumber = 3;
+runnumber = 1;
 
 N = [40, 80, 120, 160, 200, 240, 280, 320];
-M = 8*N;
+M = 4*N;
 
 xo = 10.^(-2:0.1:0);
 yo2 = (1/10)*xo.^2;
