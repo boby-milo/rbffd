@@ -1,6 +1,6 @@
 clc
 clear
-close all
+% close all
 
 warning off
 dbstop if error
@@ -8,9 +8,9 @@ dbstop if error
 ppar = gcp();
 pctRunOnAll warning off
 
-Kmul = 8;
+Kmul = 4;
 
-runnumber = 1;
+runnumber = 2;
 
 N = [40, 80, 120, 160, 200, 240, 280, 320];
 M = 4*N;
@@ -22,9 +22,9 @@ yo4 = (1/10)*xo.^4;
 for ii = 1:numel(N)
     
     
-    F0 = parfeval(@BSeuCall2Dbasket_FD,7,N(ii),M(ii),Kmul);
+    F0 = parfeval(@BSeuCall2Dbasket_FD,8,N(ii),M(ii),Kmul);
     
-    nm=2;
+    nm=4;
     
     g = 5;
     
@@ -44,7 +44,7 @@ for ii = 1:numel(N)
     F8 = parfeval(@BSeuCall2Dbasket_RBFFDadap_smooth_phs,8,N(ii),g,p,d,nm,M(ii),Kmul);
     
     
-    [uF0{ii},errF0{ii},timF0,xF0{ii},dxF0(ii),NtotF0(ii),~] = fetchOutputs(F0);
+    [uF0{ii},errF0{ii},timF0,xF0{ii},dxF0(ii),nF0(ii),NtotF0(ii),~] = fetchOutputs(F0);
     %     disp([int2str(ii),' F0 ', num2str(timF0)])
     %     disp([NtotF0(ii),d,p]);
     erF0(ii) = norm(errF0{ii},Inf);
