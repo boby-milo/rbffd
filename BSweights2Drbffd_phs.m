@@ -26,7 +26,9 @@ Wval = zeros(n,numel(indin));  %n*N
 
 % parfor (ii = indin, argfor)
 hloc = zeros(size(s,1),1); 
+br = 0;
 for ii = indin
+    br = br + 1;
     sc = s(ii,:); xc = sc(:,1); yc = sc(:,2);
     se = s(indc(ii,:),:);
     
@@ -71,7 +73,7 @@ for ii = indin
    lc = [lA; lP];
     
     wc = Ac\lc;
-    Wval(:,ii-1) = wc(1:n);
+    Wval(:,br) = wc(1:n);
 end
 
 Wval = Wval(:);
