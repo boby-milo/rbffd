@@ -1,4 +1,4 @@
-function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDreg_smooth_phs(Nx,p,d,nm,M,Kmul)
+function [u,err,tim,x,dx,n,N,W] = BSeuCall2Dbasket_RBFFDreg_smoothed_phs(Nx,p,d,nm,M,Kmul)
 %% 2D EU Call RBF-FD with BDF2
 
 funname = 'BSeuCall2Dbasket_RBFFDreg_smooth_phs';
