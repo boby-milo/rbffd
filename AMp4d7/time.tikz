@@ -1,0 +1,148 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+\definecolor{mycolor3}{rgb}{0.92900,0.69400,0.12500}%
+\definecolor{mycolor4}{rgb}{0.49400,0.18400,0.55600}%
+\definecolor{mycolor5}{rgb}{0.46600,0.67400,0.18800}%
+\definecolor{mycolor6}{rgb}{0.30100,0.74500,0.93300}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=20.667in,
+height=11.15in,
+at={(3.467in,1.505in)},
+scale only axis,
+xmode=log,
+xmin=0.1,
+xmax=10000,
+xminorticks=true,
+xlabel style={font=\color{white!15!black}},
+xlabel={h},
+ymode=log,
+ymin=1e-06,
+ymax=0.0013076943198765,
+yminorticks=true,
+ylabel style={font=\color{white!15!black}},
+ylabel={$\Delta\text{u}_{\text{max}}$},
+axis background/.style={fill=white},
+title style={font=\bfseries},
+title={convergence},
+xmajorgrids,
+xminorgrids,
+ymajorgrids,
+yminorgrids,
+legend style={at={(0.03,0.97)}, anchor=north west, legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot [color=black, line width=1.5pt, mark size=6.9pt, mark=diamond, mark options={solid, black}]
+  table[row sep=crcr]{%
+0.130733375	0.000821215670770642\\
+1.565442763	0.00022397133905942\\
+7.340443261	9.93311265642225e-05\\
+30.94618071	5.50796262076007e-05\\
+95.940886243	3.46508988966156e-05\\
+201.791108376	2.35664135528346e-05\\
+345.222650213	1.69381436427197e-05\\
+564.543287287	1.26510192906128e-05\\
+906.447161413	9.71508196527114e-06\\
+1338.634863336	7.58259030753691e-06\\
+};
+\addlegendentry{fd2}
+
+\addplot [color=mycolor1, line width=1.5pt, mark size=2.8pt, mark=square, mark options={solid, mycolor1}]
+  table[row sep=crcr]{%
+0.507910278	0.000954200708106358\\
+2.791096922	0.000194069746457547\\
+7.432595384	8.77255009682359e-05\\
+25.995603912	4.80282261447057e-05\\
+91.972586022	2.82943472744608e-05\\
+164.027152851	1.73426035778891e-05\\
+308.040637162	1.05734921444674e-05\\
+517.682444828	6.1415403071266e-06\\
+845.320300894	5.3894559744333e-06\\
+1278.709247801	5.6195430823136e-06\\
+};
+\addlegendentry{gs reg}
+
+\addplot [color=mycolor2, line width=1.5pt, mark size=2.7pt, mark=triangle, mark options={solid, mycolor2}]
+  table[row sep=crcr]{%
+0.409993936	0.00130132128488974\\
+2.744792225	0.000151465246857226\\
+9.07543005	6.22384724878605e-05\\
+31.646540162	3.66109853325164e-05\\
+90.264473238	2.5166739730912e-05\\
+210.286861	1.90825125789863e-05\\
+413.55402203	1.54319813938757e-05\\
+747.878658551	1.30825778600768e-05\\
+1326.025723309	1.19697562153132e-05\\
+2387.822094574	4.12672466708064e-05\\
+};
+\addlegendentry{gs adap}
+
+\addplot [color=mycolor3, line width=1.5pt, mark size=2.8pt, mark=square, mark options={solid, mycolor3}]
+  table[row sep=crcr]{%
+3.308376671	0.000783873320489464\\
+27.352038571	0.000198497647551078\\
+53.077453322	8.8417200055424e-05\\
+124.559195777	5.02453948494352e-05\\
+337.213971381	3.25735214005314e-05\\
+598.337381015	2.29590125499779e-05\\
+1011.868915344	1.71809067741648e-05\\
+1567.739720788	1.34034913340866e-05\\
+2323.058482613	1.08229100359951e-05\\
+3272.039334665	8.96075564215185e-06\\
+};
+\addlegendentry{phs reg}
+
+\addplot [color=mycolor4, line width=1.5pt, mark size=2.7pt, mark=triangle, mark options={solid, mycolor4}]
+  table[row sep=crcr]{%
+3.754278861	0.000645892152426844\\
+17.639323833	0.000122699808089308\\
+128.324572102	2.89078000594613e-05\\
+142.271094417	5.26402996446802e-05\\
+220.884348995	1.78936340963463e-05\\
+631.949353365	1.21707776504845e-05\\
+1184.073164892	8.67056721550602e-06\\
+1939.420444351	6.43302173102336e-06\\
+2933.779825342	4.88051124592284e-06\\
+4316.834228556	3.76883683957802e-06\\
+};
+\addlegendentry{phs adap}
+
+\addplot [color=mycolor5, dashdotted, line width=1.5pt, mark size=2.8pt, mark=square, mark options={solid, mycolor5}]
+  table[row sep=crcr]{%
+2294.782909389	1.61034448936345e-06\\
+1686.521598398	1.70502182973275e-06\\
+1254.089433245	1.82675199858441e-06\\
+849.410175955	2.15526982610612e-06\\
+585.035486893	3.12680677393845e-06\\
+369.218023321	5.28369211723681e-06\\
+151.718177847	1.12000025490784e-05\\
+86.786645112	3.301542419391e-05\\
+196.998963772	0.000144825431763421\\
+24.91939407	0.0013076943198765\\
+};
+\addlegendentry{phs reg smoothed}
+
+\addplot [color=mycolor6, dashdotted, line width=1.5pt, mark size=2.7pt, mark=triangle, mark options={solid, mycolor6}]
+  table[row sep=crcr]{%
+20.812597682	0.000119212882450665\\
+48.018490351	1.0699926004689e-05\\
+95.924300094	3.58771811615616e-06\\
+149.717215014	2.17592711744888e-06\\
+225.254549016	1.5707910822906e-06\\
+536.641866969	1.511411819186e-06\\
+826.053560452	1.47516289167966e-06\\
+1123.413750302	1.45548299318628e-06\\
+1511.578081402	1.47620497748923e-06\\
+1968.578145951	1.44464058023357e-06\\
+};
+\addlegendentry{phs adap smoothed}
+
+\end{axis}
+\end{tikzpicture}%
